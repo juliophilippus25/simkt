@@ -14,6 +14,7 @@ class User extends Authenticatable
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +45,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function profile( ){
+        return $this->hasOne(UserProfile::class);
     }
 }
