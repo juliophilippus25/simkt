@@ -7,14 +7,15 @@ Route::get('/', function () {
 });
 
 // Route login dan register
-Route::middleware('redirectIfAuthtenticated')->group(function () {
+Route::middleware('redirectIfAuthenticated')->group(function () {
     Route::get('register', [App\Http\Controllers\AuthController::class, 'showRegister'])->name('showRegister');
     Route::post('register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
     Route::get('login', [App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
     Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 });
 
-Route::middleware(['accessControl', 'redirectIfNotAuthtenticated'])->group(function () {
+// Route terproteksi
+Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(function () {
     Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
     // Route Admin

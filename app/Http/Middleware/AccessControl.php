@@ -20,24 +20,19 @@ class AccessControl
             return $next($request);
         }
 
-        if (Auth::guard('admin')->check()) {
-            if ($request->is('admin/*')) {
-                return $next($request);
-            }
-
-            toast('Akses anda ditolak!','error')->timerProgressBar()->autoClose(5000);
-            return redirect()->route('admin.dashboard');
+        if (!Auth::guard('admin')->check() && !Auth::guard('user')->check()) {
+            return $next($request);
         }
 
-        if (Auth::guard('user')->check()) {
-            if ($request->is('user/*')) {
-                return $next($request);
-            }
-
-            toast('Akses anda ditolak!','error')->timerProgressBar()->autoClose(5000);
-            return redirect()->route('user.dashboard');
+        if (Auth::guard('admin')->check() && $request->is('admin/*')) {
+            return $next($request);
         }
 
-        return $next($request);
+        if (Auth::guard('user')->check() && $request->is('user/*')) {
+            return $next($request);
+        }
+
+        toast('Akses anda ditolak!', 'error')->timerProgressBar()->autoClose(5000);
+        return Auth::guard('admin')->check() ? redirect()->route('admin.dashboard') : redirect()->route('user.dashboard');
     }
 }

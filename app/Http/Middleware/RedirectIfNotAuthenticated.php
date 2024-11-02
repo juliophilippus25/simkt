@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RedirectIfAuthtenticated
+class RedirectIfNotAuthenticated
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,9 @@ class RedirectIfAuthtenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('user')->check()) {
-            toast('Akses anda ditolak!','error')->timerProgressBar()->autoClose(5000);
-            return redirect()->route('user.dashboard');
-        } elseif (Auth::guard('admin')->check()) {
-            toast('Akses anda ditolak!','error')->timerProgressBar()->autoClose(5000);
-            return redirect()->route('admin.dashboard');
+         if (!Auth::guard('user')->check() && !Auth::guard('admin')->check()) {
+            toast('Silakan login terlebih dahulu.', 'error')->timerProgressBar()->autoClose(5000);
+            return redirect()->route('showLogin');
         }
 
         return $next($request);
