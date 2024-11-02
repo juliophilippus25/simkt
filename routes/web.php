@@ -11,3 +11,6 @@ Route::post('register', [App\Http\Controllers\AuthController::class, 'register']
 Route::get('login', [App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 
+Route::get('/test', function () {
+    return view('layouts.content');
+});
