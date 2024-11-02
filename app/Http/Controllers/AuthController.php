@@ -21,7 +21,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(),
         // Aturan
         [
-            'nik' => 'required|digits:16|regex:/^62/|unique:user_profiles,nik',
+            'nik' => 'required|digits:16|regex:/^62/|unique:users,nik',
             'name' => 'required|string|min:3',
             'phone' => 'required|digits_between:10,15|unique:user_profiles,phone',
             'email' => 'required|email|unique:users',
@@ -78,7 +78,7 @@ class AuthController extends Controller
         if ($request->hasFile('ktp') && $request->file('ktp')->isValid()) {
             $extension = $request->ktp->getClientOriginalExtension();
             $fileName = time() . '.' . $extension;
-            $ktp = $request->file('ktp')->storeAs('user/ktp', $fileName);
+            $ktp = $request->file('ktp')->storeAs('users/ktp', $fileName);
             $ktp = $fileName;
         } else {
             $ktp = NULL;
@@ -158,5 +158,10 @@ class AuthController extends Controller
         // Jika autentikasi gagal
         toast('Data anda tidak valid.','error')->timerProgressBar()->autoClose(5000);
         return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    public function logout() {
+        Auth::logout();
+        return redirect()->route('showLogin');
     }
 }

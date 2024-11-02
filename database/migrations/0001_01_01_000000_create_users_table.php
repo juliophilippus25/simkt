@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->boolean('is_active')->default(false);
             $table->boolean('is_verified')->default(false);
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         });
     }
