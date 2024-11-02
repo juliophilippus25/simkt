@@ -14,7 +14,13 @@
                 <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">
+                    @auth('admin')
+                        {{ Auth::guard('admin')->user()->name }}
+                        @elseauth('user')
+                        {{ Auth::guard('user')->user()->profile->name }}
+                    @endauth
+                </a>
             </div>
         </div>
 

@@ -14,6 +14,7 @@ class Admin extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $guard = 'admin';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
