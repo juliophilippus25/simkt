@@ -12,10 +12,11 @@ Route::middleware('redirectIfAuthtenticated')->group(function () {
     Route::post('register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
     Route::get('login', [App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
     Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
-    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 });
 
-Route::middleware('accessControl')->group(function () {
+Route::middleware(['accessControl', 'redirectIfNotAuthtenticated'])->group(function () {
+    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
     // Route Admin
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');

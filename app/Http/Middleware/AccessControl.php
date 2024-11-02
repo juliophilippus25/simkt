@@ -16,6 +16,10 @@ class AccessControl
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->is('logout')) {
+            return $next($request);
+        }
+
         if (Auth::guard('admin')->check()) {
             if ($request->is('admin/*')) {
                 return $next($request);

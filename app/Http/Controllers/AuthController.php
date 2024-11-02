@@ -161,7 +161,11 @@ class AuthController extends Controller
     }
 
     public function logout() {
-        Auth::logout();
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
+        } elseif (Auth::guard('user')->check()) {
+            Auth::guard('user')->logout();
+        }
         return redirect()->route('showLogin');
     }
 }
