@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('user_id', 100)->primary();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
-            $table->string('nik', 16)->unique();
             $table->string('phone');
             $table->enum('gender', ['M', 'F'])->nullable();
             $table->string('regency_id', 100)->nullable();
