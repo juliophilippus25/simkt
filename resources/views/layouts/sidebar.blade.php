@@ -29,38 +29,78 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
+                @auth('admin')
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Pengguna
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="../../index.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Admin</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.users') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Penghuni</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li class="nav-item {{ request()->is('admin/user*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('admin/user*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Pengguna
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Admin</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.users') }}"
+                                    class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Penghuni</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endauth
+
+                @auth('user')
+                    <li class="nav-item">
+                        <a href="{{ route('user.dashboard') }}"
+                            class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-address-book"></i>
+                            <p>
+                                Pengajuan
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="../../index.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Penghuni Kamar</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.users') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Keluar Kamar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endauth
 
                 <li class="nav-item">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

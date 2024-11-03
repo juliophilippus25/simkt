@@ -21,8 +21,11 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     // Route Admin
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
-        Route::post('/users/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');
+
+        Route::prefix('/user')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
+            Route::post('/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');
+        });
     });
 
     // Route User
