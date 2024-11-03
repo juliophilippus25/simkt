@@ -33,3 +33,8 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
     });
 });
+
+
+Route::get('/verified', function () {
+    return view('email.verified');
+});

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Verified;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -26,12 +28,15 @@ class UserController extends Controller
 
         $nik = $user->nik;
         $phone = $user->profile->phone;
+        $name = $user->profile->name;
 
         $user->password = $this->generatePassword($nik, $phone);
         $user->is_verified = 1;
         $user->is_active = 1;
         $user->verified_at = now();
         $user->save();
+
+        Mail::to($user->email)->send(new Verified($name));
 
         toast('Penghuni berhasil diverifikasi.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();
