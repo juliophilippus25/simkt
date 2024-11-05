@@ -394,36 +394,51 @@
 
                                 {{-- Akun --}}
                                 <div class="tab-pane" id="akun">
-                                    <form class="form-horizontal">
+                                    <form class="form-horizontal" method="POST"
+                                        action="{{ route('user.password.update') }}">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="form-group row">
                                             <label for="email" class="col-sm-3 col-form-label">Email</label>
                                             <div class="col-sm-9">
                                                 <input type="email" class="form-control" id="email"
-                                                    placeholder="Email" value="{{ $user->email }}">
+                                                    placeholder="Email" value="{{ $user->email }}" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="current_password" class="col-sm-3 col-form-label">Password
                                                 Lama</label>
                                             <div class="col-sm-9">
-                                                <input type="password" class="form-control" id="current_password"
-                                                    placeholder="Password lama">
+                                                <input type="password"
+                                                    class="form-control @error('current_password') is-invalid @enderror"
+                                                    id="current_password" name="current_password" placeholder="Password lama">
+                                                @error('current_password')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="password" class="col-sm-3 col-form-label">Password
+                                            <label for="new_password" class="col-sm-3 col-form-label">Password Baru
                                                 Baru</label>
                                             <div class="col-sm-9">
-                                                <input type="password" class="form-control" id="password"
-                                                    placeholder="Password baru">
+                                                <input type="password"
+                                                    class="form-control @error('new_password') is-invalid @enderror"
+                                                    id="new_password" name="new_password" placeholder="Password baru">
+                                                @error('new_password')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="confirmation_password" class="col-sm-3 col-form-label">Konfirmasi
+                                            <label for="confirm_password" class="col-sm-3 col-form-label">Konfirmasi
                                                 Password</label>
                                             <div class="col-sm-9">
-                                                <input type="password" class="form-control" id="confirmation_password"
-                                                    placeholder="Konfirmasi password">
+                                                <input type="password"
+                                                    class="form-control @error('confirm_password') is-invalid @enderror"
+                                                    id="confirm_password" name="confirm_password" placeholder="Konfirmasi password">
+                                                @error('confirm_password')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -433,6 +448,7 @@
                                         </div>
                                     </form>
                                 </div>
+
                                 <!-- /.tab-pane -->
                             </div>
                             <!-- /.tab-content -->

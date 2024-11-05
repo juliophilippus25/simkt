@@ -7,6 +7,7 @@ use App\Models\Regency;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -149,6 +150,43 @@ class ProfileController extends Controller
 
         // redirect dengan pesan sukses
         toast('Update berkas berhasil.','success')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
+    }
+
+    public function updatePassword(Request $request) {
+        $userId = auth('user')->user()->id;
+        $user = User::findOrFail($userId);
+
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_password' => 'required|min:8|same:new_password',
+        ], [
+            'current_password.required' => 'Password lama harus diisi.',
+            'new_password.required' => 'Password baru harus diisi.',
+            'new_password.min' => 'Password baru minimal 8 karakter.',
+            'confirm_password.required' => 'Konfirmasi password baru harus diisi.',
+            'confirm_password.min' => 'Konfirmasi password baru minimal 8 karakter.',
+            'confirm_password.same' => 'Konfirmasi password baru harus sama dengan password baru.',
+        ]);
+
+        if($validator->fails()){
+            // redirect dengan pesan error
+            toast('Periksa kembali data anda.','error')->timerProgressBar()->autoClose(5000);
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            // redirect dengan pesan error
+            toast('Password lama tidak sesuai.','error')->timerProgressBar()->autoClose(5000);
+            return redirect()->back();
+        }
+
+        $user->password = $request->new_password;
+        $user->save();
+
+        // redirect dengan pesan sukses
+        toast('Update password berhasil.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();
     }
 }
