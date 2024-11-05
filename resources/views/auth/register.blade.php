@@ -80,7 +80,7 @@
                             <select id="gender"
                                 class="form-control @error('gender') is-invalid @enderror @if (old('gender') && !$errors->has('gender')) is-valid @endif"
                                 name="gender" required>
-                                <option value="">-- Pilih Jenis Kelamin --</option>
+                                <option value="">Pilih Jenis Kelamin</option>
                                 <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Laki-laki
                                 </option>
                                 <option value="F" {{ old('gender') == 'F' ? 'selected' : '' }}>Perempuan

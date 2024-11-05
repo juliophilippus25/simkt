@@ -14,13 +14,15 @@
                 <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">
-                    @auth('admin')
+                @auth('admin')
+                    <a href="{{ route('profile', Auth::guard('admin')->user()->id) }}" class="d-block">
                         {{ Auth::guard('admin')->user()->name }}
-                        @elseauth('user')
+                    </a>
+                    @elseauth('user')
+                    <a href="{{ route('user.profile') }}" class="d-block">
                         {{ Auth::guard('user')->user()->profile->name }}
-                    @endauth
-                </a>
+                    </a>
+                @endauth
             </div>
         </div>
 
@@ -40,8 +42,8 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->is('admin/user*') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('admin/user*') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('admin/penghuni*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('admin/penghuni*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Pengguna
@@ -89,13 +91,13 @@
                             <li class="nav-item">
                                 <a href="../../index.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Penghuni Kamar</p>
+                                    <p>Penghuni</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('admin.users') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Keluar Kamar</p>
+                                    <p>Keluar Asrama</p>
                                 </a>
                             </li>
                         </ul>

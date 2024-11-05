@@ -22,7 +22,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
-        Route::prefix('/user')->group(function () {
+        Route::prefix('/penghuni')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
             Route::post('/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');
         });
@@ -31,10 +31,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     // Route User
     Route::prefix('/user')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
+        Route::get('/profil', [App\Http\Controllers\User\ProfileController::class, 'index'])->name('user.profile');
+        Route::post('/update-profile', [App\Http\Controllers\User\ProfileController::class, 'updateProfile'])->name('user.profile.update');
     });
-});
-
-
-Route::get('/verified', function () {
-    return view('email.verified');
 });

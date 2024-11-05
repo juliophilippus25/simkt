@@ -41,7 +41,11 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->profile->name }}</td>
+                                <td>
+                                    <a href="{{ asset('storage/users/ktp/' . $user->profile->ktp) }}" target="_blank">
+                                        {{ $user->profile->name }}
+                                    </a>
+                                </td>
                                 <td>
                                     @if ($user->profile->gender == 'M')
                                         Laki-laki
@@ -59,6 +63,7 @@
                                             <i class="fas fa-check"></i>
                                         </button>
 
+                                        {{-- Modal Verifikasi --}}
                                         <div class="modal fade" id="verifyModal{{ $user->id }}">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -87,11 +92,8 @@
                                                         </form>
                                                     </div>
                                                 </div>
-                                                <!-- /.modal-content -->
                                             </div>
-                                            <!-- /.modal-dialog -->
                                         </div>
-                                        <!-- /.modal -->
                                     @elseif ($user->is_verified == 1)
                                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                             data-bs-target="#detailModal{{ $user->id }}" title="Detail">

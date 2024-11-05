@@ -16,8 +16,10 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->string('phone');
+            $table->date('birth_date')->nullable();
             $table->enum('gender', ['M', 'F'])->nullable();
-            $table->string('regency_id', 100)->nullable();
+            $table->string('regency_id', 10)->nullable();
+            $table->foreign('regency_id')->references('id')->on('regencies')->onDelete('set null');
             $table->string('nim')->nullable();
             $table->string('university')->nullable();
             $table->string('major')->nullable();

@@ -12,6 +12,7 @@ class UserProfile extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'birth_date',
         'phone',
         'gender',
         'regency_id',
@@ -24,8 +25,13 @@ class UserProfile extends Model
         'photo',
     ];
 
+    public function regency()
+    {
+        return $this->belongsTo(Regency::class, 'regency_id', 'id');
+    }
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
