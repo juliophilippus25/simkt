@@ -29,7 +29,6 @@
             </div>
             <div class="card-body">
                 @if (!$dataLengkap)
-                    <!-- Jika data profil belum lengkap -->
                     <div class="d-flex justify-content-center">
                         <div class="alert alert-warning text-center" style="width: 100%;">
                             <p><strong>Perhatian!</strong> Lengkapi data Anda terlebih dahulu.</p>
@@ -38,13 +37,35 @@
                         </div>
                     </div>
                 @else
-                    <div class="d-flex justify-content-center align-items-center">
-                        <div class="text-center">
-                            <p>Data sudah lengkap, Anda dapat mengajukan sebagai penghuni.</p>
-                            <a href="{{ route('user.profile') }}" class="btn btn-primary"
-                                style="text-decoration: none;">Ajukan</a>
+                    @if (!$appliedResidency)
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <p>Data sudah lengkap, Anda dapat mengajukan sebagai penghuni.</p>
+                                <form action="{{ route('user.penghuni.apply') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Ajukan</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @elseif ($appliedResidency->status == 'pending')
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <p>Pengajuan Anda sedang kami periksa.</p>
+                            </div>
+                        </div>
+                    @elseif ($appliedResidency->status == 'accepted')
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <p>Pengajuan Anda telah disetujui.</p>
+                            </div>
+                        </div>
+                    @elseif ($appliedResidency->status == 'rejected')
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="text-center">
+                                <p>Pengajuan Anda ditolak.</p>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
