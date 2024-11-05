@@ -32,6 +32,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     Route::prefix('/user')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
         Route::get('/profil', [App\Http\Controllers\User\ProfileController::class, 'index'])->name('user.profile');
-        Route::post('/update-profile', [App\Http\Controllers\User\ProfileController::class, 'updateProfile'])->name('user.profile.update');
+        Route::post('/update-biodata', [App\Http\Controllers\User\ProfileController::class, 'updateBiodata'])->name('user.biodata.update');
+        Route::post('/update-berkas', [App\Http\Controllers\User\ProfileController::class, 'updateBerkas'])->name('user.berkas.update');
     });
 });

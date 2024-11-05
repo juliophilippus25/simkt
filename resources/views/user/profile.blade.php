@@ -88,48 +88,51 @@
                                                 <td style="width: 50%;">
                                                     {{ isset($user->profile) && $user->profile->birth_date
                                                         ? \Carbon\Carbon::parse($user->profile->birth_date)->isoFormat('D MMMM YYYY')
-                                                        : 'Belum ada' }}
+                                                        : 'Tanggal lahir belum diisi' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Kabupaten/kota Asal</td>
-                                                <td style="width: 70%;">{{ $user->profile->regency->name ?? 'Belum ada' }}
+                                                <td style="width: 70%;">
+                                                    {{ $user->profile->regency->name ?? 'Kabupaten/kota asal belum diisi' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">NIM</td>
-                                                <td style="width: 70%;">{{ $user->profile->nim ?? 'Belum ada' }}</td>
+                                                <td style="width: 70%;">{{ $user->profile->nim ?? 'NIM belum diisi' }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Universitas</td>
-                                                <td style="width: 70%;">{{ $user->profile->university ?? 'Belum ada' }}
+                                                <td style="width: 70%;">
+                                                    {{ $user->profile->university ?? 'Universitas belum diisi' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Jurusan</td>
-                                                <td style="width: 70%;">{{ $user->profile->major ?? 'Belum ada' }}</td>
+                                                <td style="width: 70%;">
+                                                    {{ $user->profile->major ?? 'Jurusan belum diisi' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                        data-target="#updateModal{{ $user->id }}">
-                                        Edit
+                                        data-target="#updateBiodata{{ $user->id }}">
+                                        Ubah Biodata
                                     </button>
 
-                                    {{-- Modal Verifikasi --}}
-                                    <div class="modal fade" id="updateModal{{ $user->id }}">
+                                    {{-- Modal Biodata --}}
+                                    <div class="modal fade" id="updateBiodata{{ $user->id }}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Edit Profil</h4>
+                                                    <h4 class="modal-title">Ubah Biodata</h4>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('user.profile.update', $user->id) }}"
-                                                        method="POST" id="updateForm{{ $user->id }}">
+                                                    <form action="{{ route('user.biodata.update', $user->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         @method('POST')
 
@@ -217,7 +220,7 @@
                                                             @enderror
                                                         </div>
 
-                                                        <div class="modal-footer justify-content-between">
+                                                        <div class="modal-footer">
                                                             <button type="submit" class="btn btn-primary">
                                                                 Simpan
                                                             </button>
@@ -236,29 +239,157 @@
                                         <tbody>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">KTP</td>
-                                                <td style="width: 70%;">{{ $user->nik }}</td>
+                                                <td style="width: 70%;">
+                                                    @if ($user->profile->ktp)
+                                                        <a href="{{ asset('storage/users/ktp/' . $user->profile->ktp) }}"
+                                                            target="_blank">Lihat KTP
+                                                        </a>
+                                                    @else
+                                                        KTP belum diunggah.
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Kartu Keluarga</td>
-                                                <td style="width: 70%;">{{ $user->profile->name }}</td>
+                                                <td style="width: 70%;">
+                                                    @if ($user->profile->family_card)
+                                                        <a href="{{ asset('storage/users/kartu-keluarga/' . $user->profile->family_card) }}"
+                                                            target="_blank">Lihat Kartu Keluarga
+                                                        </a>
+                                                    @else
+                                                        Kartu keluarga belum diunggah.
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Surat Aktif Kuliah</td>
                                                 <td style="width: 70%;">
-                                                    @if ($user->profile->gender == 'M')
-                                                        Laki-laki
+                                                    @if ($user->profile->active_student)
+                                                        <a href="{{ asset('storage/users/surat-aktif/' . $user->profile->active_student) }}"
+                                                            target="_blank">Lihat Surat Aktif Kuliah
+                                                        </a>
                                                     @else
-                                                        Perempuan
+                                                        Surat aktif kuliah belum diunggah.
                                                     @endif
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Foto</td>
-                                                <td style="width: 70%;">{{ $user->profile->major ?? 'Belum ada' }}
+                                                <td style="width: 70%;">
+                                                    @if ($user->profile->photo)
+                                                        <a href="{{ asset('storage/users/foto/' . $user->profile->photo) }}"
+                                                            target="_blank">Lihat Foto
+                                                        </a>
+                                                    @else
+                                                        Foto belum diunggah.
+                                                    @endif
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                        data-target="#updateBerkas{{ $user->id }}">
+                                        Ubah Berkas
+                                    </button>
+
+                                    {{-- Modal Berkas --}}
+                                    <div class="modal fade" id="updateBerkas{{ $user->id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Ubah Berkas</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('user.berkas.update', $user->id) }}"
+                                                        method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        @method('POST')
+
+                                                        <div class="form-group">
+                                                            <label for="ktp">KTP <b class="text-danger">*</b></label>
+                                                            <div class="input-group">
+                                                                <div class="custom-file">
+                                                                    <input type="file" id="ktp"
+                                                                        class="custom-file-input @error('ktp') is-invalid @enderror"
+                                                                        name="ktp">
+                                                                    <label class="custom-file-label" for="ktp">Pilih
+                                                                        file KTP</label>
+                                                                </div>
+                                                            </div>
+                                                            @error('ktp')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="family_card">Kartu Keluarga <b
+                                                                    class="text-danger">*</b></label>
+                                                            <div class="input-group">
+                                                                <div class="custom-file">
+                                                                    <input type="file" id="family_card"
+                                                                        class="custom-file-input @error('family_card') is-invalid @enderror"
+                                                                        name="family_card">
+                                                                    <label class="custom-file-label"
+                                                                        for="family_card">Pilih
+                                                                        file kartu keluarga</label>
+                                                                </div>
+                                                            </div>
+                                                            @error('family_card')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="active_student">Surat Aktif Kuliah <b
+                                                                    class="text-danger">*</b></label>
+                                                            <div class="input-group">
+                                                                <div class="custom-file">
+                                                                    <input type="file" id="active_student"
+                                                                        class="custom-file-input @error('active_student') is-invalid @enderror"
+                                                                        name="active_student">
+                                                                    <label class="custom-file-label"
+                                                                        for="active_student">Pilih
+                                                                        file surat aktif kuliah</label>
+                                                                </div>
+                                                            </div>
+                                                            @error('active_student')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="photo">Foto <b
+                                                                    class="text-danger">*</b></label>
+                                                            <div class="input-group">
+                                                                <div class="custom-file">
+                                                                    <input type="file" id="photo"
+                                                                        class="custom-file-input @error('photo') is-invalid @enderror"
+                                                                        name="photo">
+                                                                    <label class="custom-file-label" for="photo">Pilih
+                                                                        file foto</label>
+                                                                </div>
+                                                            </div>
+                                                            @error('photo')
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary">
+                                                                Simpan
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 {{-- Akun --}}
@@ -317,13 +448,13 @@
 @section('script')
     <script>
         $(function() {
-            //Initialize Select2 Elements
-            $('.select2').select2()
-
-            //Initialize Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
+        });
+
+        $(function() {
+            bsCustomFileInput.init();
         });
     </script>
 @endsection

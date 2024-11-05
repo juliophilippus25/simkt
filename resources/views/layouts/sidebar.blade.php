@@ -15,7 +15,7 @@
             </div>
             <div class="info">
                 @auth('admin')
-                    <a href="{{ route('profile', Auth::guard('admin')->user()->id) }}" class="d-block">
+                    <a href="#" class="d-block">
                         {{ Auth::guard('admin')->user()->name }}
                     </a>
                     @elseauth('user')
