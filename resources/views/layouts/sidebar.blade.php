@@ -11,7 +11,16 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
+                @auth('user')
+                    @if (Auth::guard('user')->user()->profile->photo)
+                        <img src="{{ asset('storage/users/foto/' . Auth::guard('user')->user()->profile->photo) }}"
+                            class="img-circle elevation-2" alt="User Image">
+                    @else
+                        <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
+                    @endif
+                    @elseauth('admin')
+                    <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
+                @endauth
             </div>
             <div class="info">
                 @auth('admin')
@@ -79,8 +88,8 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ request()->is('user/penghuni*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('user/penghuni*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-address-book"></i>
                             <p>
                                 Pengajuan
@@ -89,7 +98,8 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="../../index.html" class="nav-link">
+                                <a href="{{ route('user.penghuni') }}"
+                                    class="nav-link {{ request()->routeIs('user.penghuni') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penghuni</p>
                                 </a>

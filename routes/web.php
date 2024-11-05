@@ -35,5 +35,6 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::post('/update-biodata', [App\Http\Controllers\User\ProfileController::class, 'updateBiodata'])->name('user.biodata.update');
         Route::post('/update-berkas', [App\Http\Controllers\User\ProfileController::class, 'updateBerkas'])->name('user.berkas.update');
         Route::put('/update-password', [App\Http\Controllers\User\ProfileController::class, 'updatePassword'])->name('user.password.update');
+        Route::get('/penghuni', [App\Http\Controllers\User\PenghuniController::class, 'index'])->name('user.penghuni');
     });
 });

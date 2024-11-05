@@ -137,7 +137,7 @@ class AuthController extends Controller
             // Jika itu NIK, autentikasi sebagai user
             $credentials = ['nik' => $identifier, 'password' => $password];
             if (Auth::guard('user')->attempt($credentials)) {
-                toast('Anda berhasil masuk ke dashboard user.','success')->timerProgressBar()->autoClose(5000);
+                toast('Anda berhasil masuk ke sistem.','success')->timerProgressBar()->autoClose(5000);
                 return redirect()->intended(route('user.dashboard'));
             }
         } elseif (strlen($identifier) === 18 && preg_match('/^[0-9]+$/', $identifier)) {
@@ -150,7 +150,7 @@ class AuthController extends Controller
             // Jika itu NIP, autentikasi sebagai admin
             $credentials = ['nip' => $identifier, 'password' => $password];
             if (Auth::guard('admin')->attempt($credentials)) {
-                toast('Anda berhasil masuk ke dashboard admin.','success')->timerProgressBar()->autoClose(5000);
+                toast('Anda berhasil masuk ke sistem.','success')->timerProgressBar()->autoClose(5000);
                 return redirect()->intended(route('admin.dashboard'));
             }
         }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $user->profile->name)
+@section('title', 'Profil')
 
 @section('content')
     <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">{{ $user->profile->name }}</li>
+                        <li class="breadcrumb-item active">Profil</li>
                     </ol>
                 </div>
             </div>
@@ -29,8 +29,14 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="{{ asset('images/default.png') }}"
-                                    alt="User profile picture">
+                                @if ($user->profile->photo)
+                                    <img class="profile-user-img img-fluid img-circle"
+                                        src="{{ asset('storage/users/foto/' . $user->profile->photo) }}"
+                                        alt="User profile picture">
+                                @else
+                                    <img class="profile-user-img img-fluid img-circle"
+                                        src="{{ asset('images/default.png') }}" alt="User profile picture">
+                                @endif
                             </div>
 
                             <h3 class="profile-username text-center">{{ $user->profile->name }}</h3>
@@ -411,7 +417,8 @@
                                             <div class="col-sm-9">
                                                 <input type="password"
                                                     class="form-control @error('current_password') is-invalid @enderror"
-                                                    id="current_password" name="current_password" placeholder="Password lama">
+                                                    id="current_password" name="current_password"
+                                                    placeholder="Password lama">
                                                 @error('current_password')
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror
@@ -435,7 +442,8 @@
                                             <div class="col-sm-9">
                                                 <input type="password"
                                                     class="form-control @error('confirm_password') is-invalid @enderror"
-                                                    id="confirm_password" name="confirm_password" placeholder="Konfirmasi password">
+                                                    id="confirm_password" name="confirm_password"
+                                                    placeholder="Konfirmasi password">
                                                 @error('confirm_password')
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror

@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" id="name"
-                                class="form-control @error('name') is-invalid @enderror @if (old('name') && !$errors->has('name')) is-valid @endif"
+                                class="form-control @error('name') is-invalid @enderror"
                                 placeholder="Nama lengkap" name="name" value="{{ old('name') }}" required>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <input type="email" id="email"
-                                class="form-control @error('email') is-invalid @enderror @if (old('email') && !$errors->has('email')) is-valid @endif"
+                                class="form-control @error('email') is-invalid @enderror"
                                 placeholder="Email" name="email" value="{{ old('email') }}" required>
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
@@ -62,7 +62,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" id="phone"
-                                class="form-control @error('phone') is-invalid @enderror @if (old('phone') && !$errors->has('phone')) is-valid @endif"
+                                class="form-control @error('phone') is-invalid @enderror"
                                 placeholder="Nomor HP" name="phone" value="{{ old('phone') }}"
                                 onkeypress="return isNumberKey(event)" required>
                             <div class="input-group-append">
@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <select id="gender"
-                                class="form-control @error('gender') is-invalid @enderror @if (old('gender') && !$errors->has('gender')) is-valid @endif"
+                                class="form-control @error('gender') is-invalid @enderror"
                                 name="gender" required>
                                 <option value="">Pilih Jenis Kelamin</option>
                                 <option value="M" {{ old('gender') == 'M' ? 'selected' : '' }}>Laki-laki
@@ -99,7 +99,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" id="nik"
-                                class="form-control @error('nik') is-invalid @enderror @if (old('nik') && !$errors->has('nik')) is-valid @endif"
+                                class="form-control @error('nik') is-invalid @enderror"
                                 placeholder="NIK" name="nik" value="{{ old('nik') }}"
                                 onkeypress="return isNumberKey(event)" required>
                             <div class="input-group-append">
@@ -116,7 +116,7 @@
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" id="ktp"
-                                    class="custom-file-input @error('ktp') is-invalid @enderror @if (old('ktp') && !$errors->has('ktp')) is-valid @endif"
+                                    class="custom-file-input @error('ktp') is-invalid @enderror"
                                     name="ktp" required>
                                 <label class="custom-file-label" for="ktp">Pilih file KTP</label>
                             </div>
