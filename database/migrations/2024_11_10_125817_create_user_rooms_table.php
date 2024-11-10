@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('room_id', 10)->nullable();
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('set null');
             $table->datetime('rent_period')->nullable();
-            $table->string('payment_id', 10)->nullable();
-            $table->foreign('payment_id')->references('id')->on('rooms')->onDelete('set null');
+            $table->string('payment_id', 100)->nullable();
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('set null');
             $table->timestamps();
         });
     }

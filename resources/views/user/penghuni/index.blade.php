@@ -54,11 +54,99 @@
                             </div>
                         </div>
                     @elseif ($appliedResidency->status == 'accepted')
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="text-center">
-                                <p>Pengajuan Anda telah disetujui.</p>
+                        @if ($user->userRoom)
+                            <div class="row">
+
+                                <!-- Detail Info Kamar -->
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Informasi Kamar</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table table-striped">
+                                                <tr>
+                                                    <td>Nama Kamar</td>
+                                                    <td>:</td>
+                                                    <td>{{ $user->userRoom->room->name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Penempatan</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        @if ($user->profile->gender == 'M' && $user->userRoom->room->room_type == 'M')
+                                                            Asrama Putra
+                                                        @elseif ($user->profile->gender == 'F' && $user->userRoom->room->room_type == 'F')
+                                                            Asrama Putri
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tanggal Masuk</td>
+                                                    <td>:</td>
+                                                    <td>{{ Carbon\Carbon::parse($user->userRoom->created_at)->isoFormat('D MMMM YYYY') }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Akhir Sewa</td>
+                                                    <td>:</td>
+                                                    <td>{{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="text-center">
+                                    <p>Pengajuan Anda telah disetujui.</p>
+
+                                    <!-- Informasi Pembayaran -->
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2" class="text-center">Informasi Pembayaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Bank</strong></td>
+                                                <td>BRI</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Atas Nama</strong></td>
+                                                <td>Dora</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Nomor Rekening</strong></td>
+                                                <td>1234-5678-9101</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Bayar</strong></td>
+                                                <td>Rp. 250.000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <form action="{{ route('user.penghuni.payment') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="proof">Upload Bukti Pembayaran <b
+                                                    class="text-danger">*</b></label>
+                                            <input type="file" name="proof" id="proof" class="form-control"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group mt-3">
+                                            <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
                     @elseif ($appliedResidency->status == 'rejected')
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="text-center">

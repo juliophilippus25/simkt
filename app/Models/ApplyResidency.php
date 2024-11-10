@@ -26,4 +26,9 @@ class ApplyResidency extends Model
     {
         return $this->belongsTo(Admin::class, 'verified_by', 'id');
     }
+
+    public function hasPaid()
+    {
+        return $this->payment && $this->payment->is_accepted;
+    }
 }

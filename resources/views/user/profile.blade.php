@@ -32,10 +32,11 @@
                                 @if ($user->profile->photo)
                                     <img class="profile-user-img img-fluid img-circle"
                                         src="{{ asset('storage/users/foto/' . $user->profile->photo) }}"
-                                        alt="User profile picture">
+                                        alt="User profile picture" style="width: 120px; height: 120px; object-fit: cover;">
                                 @else
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('images/default.png') }}" alt="User profile picture">
+                                        src="{{ asset('images/default.png') }}" alt="User profile picture"
+                                        style="width: 120px; height: 120px; object-fit: cover;">
                                 @endif
                             </div>
 

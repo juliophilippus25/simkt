@@ -56,4 +56,12 @@ class User extends Authenticatable
     public function applyResidency( ){
         return $this->hasOne(ApplyResidency::class);
     }
+
+    public function userRoom(){
+        return $this->hasOne(UserRoom::class);
+    }
+
+    public function payment( ){
+        return $this->hasMany(Payment::class);
+    }
 }
