@@ -31,7 +31,7 @@ class ResidencyController extends Controller
     public function storeApplyResidency() {
         $userId = auth('user')->user()->id;
 
-        $existingApplication = ApplyResidency::where('user_id', $userId)->first();
+        $existingApplication = ApplyResidency::where('user_id', $userId)->where('status', 'pending')->first();
 
         if ($existingApplication) {
             toast('Anda sudah mengajukan permohonan sebelumnya.','warning')->timerProgressBar()->autoClose(5000);

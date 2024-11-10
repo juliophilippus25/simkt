@@ -10,15 +10,13 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         $dataType = 'penghuni';
         $users = User::with('profile')->get();
         return view('admin.user.index', compact('dataType', 'users'));
     }
 
-    public function verify($id)
-    {
+    public function verify($id) {
         $user = User::findOrFail($id);
 
         if ($user->is_verified) {

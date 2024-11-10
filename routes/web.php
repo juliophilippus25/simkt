@@ -26,6 +26,12 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
             Route::post('/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');
         });
+
+        Route::prefix('/pengajuan-penghuni')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\ResidencyController::class, 'index'])->name('admin.pengajuan');
+            Route::post('/accept/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'acceptApplyResidency'])->name('admin.pengajuan.accept');
+            Route::post('/reject/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'rejectApplyResidency'])->name('admin.pengajuan.reject');
+        });
     });
 
     // Route User

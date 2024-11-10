@@ -53,7 +53,7 @@ class User extends Authenticatable
         return $this->hasOne(UserProfile::class);
     }
 
-    public function applyRedency( ){
+    public function applyResidency( ){
         return $this->hasOne(ApplyResidency::class);
     }
 }

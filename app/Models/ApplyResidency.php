@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ApplyResidency extends Model
 {
     protected $keyType = 'string';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'user_id',
