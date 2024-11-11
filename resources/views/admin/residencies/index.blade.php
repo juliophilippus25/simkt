@@ -86,14 +86,12 @@
                                                         <b>{{ $residency->user->profile->name }}</b>?
                                                     </div>
                                                     <div class="modal-footer justify-content-end">
-                                                        <form
-                                                            action="{{ route('admin.pengajuan.reject', $residency->id) }}"
+                                                        <form action="{{ route('admin.penghuni.reject', $residency->id) }}"
                                                             method="POST" id="rejectForm{{ $residency->user->id }}">
                                                             @csrf
                                                             <button type="submit" class="btn btn-danger">Tolak</button>
                                                         </form>
-                                                        <form
-                                                            action="{{ route('admin.pengajuan.accept', $residency->id) }}"
+                                                        <form action="{{ route('admin.penghuni.accept', $residency->id) }}"
                                                             method="POST" id="acceptForm{{ $residency->user->id }}">
                                                             @csrf
                                                             <button type="submit" class="btn btn-primary">Terima</button>
@@ -114,7 +112,7 @@
 
                                             <!-- Modal Detail Verifikasi Kamar -->
                                             <div class="modal fade" id="detailModal{{ $residency->user->id }}">
-                                                <form action="{{ route('admin.pengajuan.verify', $residency->user->id) }}"
+                                                <form action="{{ route('admin.penghuni.verify', $residency->user->id) }}"
                                                     method="POST" id="acceptPaymentForm{{ $residency->user->id }}">
                                                     @csrf
                                                     <div class="modal-dialog">
@@ -168,7 +166,7 @@
                                                                     data-dismiss="modal">Tutup</button>
                                                                 @if ($residency->payment_status == 'Sudah Bayar')
                                                                     <button type="submit"
-                                                                        class="btn btn-primary">Veifikasi</button>
+                                                                        class="btn btn-primary">Verifikasi</button>
                                                                 @endif
                                                             </div>
                                                         </div>
