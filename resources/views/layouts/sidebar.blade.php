@@ -14,12 +14,15 @@
                 @auth('user')
                     @if (Auth::guard('user')->user()->profile->photo)
                         <img src="{{ asset('storage/users/foto/' . Auth::guard('user')->user()->profile->photo) }}"
-                            class="img-circle elevation-2" alt="User Image">
+                            class="img-circle elevation-2" alt="User Image"
+                            style="width: 35px; height: 35px; object-fit: cover;">
                     @else
-                        <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
+                        <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image"
+                            style="width: 35px; height: 35px; object-fit: cover;">
                     @endif
                     @elseauth('admin')
-                    <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image"
+                        style="width: 35px; height: 35px; object-fit: cover;">
                 @endauth
             </div>
             <div class="info">

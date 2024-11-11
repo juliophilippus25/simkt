@@ -53,10 +53,14 @@
                                 <td>{{ \Carbon\Carbon::parse($residency->created_at)->isoFormat('D MMMM YYYY') }}</td>
                                 <td>
                                     @if ($residency->status == 'pending')
-                                        <span class="badge badge-warning">Proses</span>
-                                    @elseif($residency->status == 'accepted')
+                                        <span class="badge badge-info">Proses</span>
+                                    @elseif ($residency->status == 'pending-payment' && $residency->payment_proof)
+                                        <span class="badge badge-info">Pembayaran diterima</span>
+                                    @elseif ($residency->status == 'pending-payment')
+                                        <span class="badge badge-warning">Menunggu pembayaran</span>
+                                    @elseif ($residency->status == 'accepted')
                                         <span class="badge badge-success">Disetujui</span>
-                                    @elseif($residency->status == 'rejected')
+                                    @elseif ($residency->status == 'rejected')
                                         <span class="badge badge-danger">Ditolak</span>
                                     @endif
                                 </td>
@@ -100,79 +104,83 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    @elseif ($residency->status == 'pending-payment')
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                            data-target="#detailModal{{ $residency->user->id }}" title="Detail">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+
+                                        <!-- Modal Detail Verifikasi Kamar -->
+                                        <div class="modal fade" id="detailModal{{ $residency->user->id }}">
+                                            <form
+                                                action="{{ route('admin.penghuni.verify-or-reject', $residency->user->id) }}"
+                                                method="POST" id="paymentForm{{ $residency->user->id }}">
+                                                @csrf
+                                                <input type="hidden" name="action" value="verify">
+
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">Verifikasi Kamar Penghuni -
+                                                                {{ $residency->user->profile->name }}</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            @if ($residency->payment_status == 'Belum Bayar')
+                                                                <div class="alert alert-warning">Belum ada bukti pembayaran
+                                                                    yang diupload.</div>
+                                                            @else
+                                                                @if ($residency->payment_proof)
+                                                                    <div class="form-group">
+                                                                        <label>Bukti Pembayaran:</label>
+                                                                        <a href="{{ asset('storage/users/bukti-bayar/' . $residency->payment_proof) }}"
+                                                                            target="_blank">Lihat Bukti Pembayaran</a>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="room_id">Kamar <b
+                                                                                class="text-danger">*</b></label>
+                                                                        <select name="room_id" id="room_id"
+                                                                            class="form-control">
+                                                                            <option value="">Pilih kamar penghuni
+                                                                            </option>
+                                                                            @foreach ($rooms as $room)
+                                                                                @if (
+                                                                                    ($residency->user->profile->gender == 'M' && $room->room_type == 'M') ||
+                                                                                        ($residency->user->profile->gender == 'F' && $room->room_type == 'F'))
+                                                                                    @if ($room->status == 'available')
+                                                                                        <option
+                                                                                            value="{{ $room->id }}">
+                                                                                            {{ $room->name }}</option>
+                                                                                    @endif
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                @endif
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="modal-footer justify-content-end">
+                                                            @if ($residency->payment_status == 'Sudah Bayar')
+                                                                <button type="submit" class="btn btn-danger"
+                                                                    onclick="this.form.querySelector('input[name=action]').value='reject'">Tolak</button>
+
+                                                                <button type="submit" class="btn btn-primary"
+                                                                    onclick="this.form.querySelector('input[name=action]').value='verify'">Verifikasi</button>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     @elseif ($residency->status == 'accepted')
                                         @if ($residency->user->userRoom)
                                             <a href="{{ route('admin.penghuni.show', $residency->user->id) }}"
                                                 class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
-                                        @else
-                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                data-target="#detailModal{{ $residency->user->id }}" title="Detail">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-
-                                            <!-- Modal Detail Verifikasi Kamar -->
-                                            <div class="modal fade" id="detailModal{{ $residency->user->id }}">
-                                                <form action="{{ route('admin.penghuni.verify', $residency->user->id) }}"
-                                                    method="POST" id="acceptPaymentForm{{ $residency->user->id }}">
-                                                    @csrf
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Verifikasi Kamar Penghuni -
-                                                                    {{ $residency->user->profile->name }}</h4>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                @if ($residency->payment_status == 'Belum Bayar')
-                                                                    <div class="alert alert-warning">Belum ada bukti
-                                                                        pembayaran
-                                                                        yang diupload.</div>
-                                                                @else
-                                                                    @if ($residency->payment_proof)
-                                                                        <div class="form-group">
-                                                                            <label>Bukti Pembayaran:</label>
-                                                                            <a href="{{ asset('storage/users/bukti-bayar/' . $residency->payment_proof) }}"
-                                                                                target="_blank">Lihat Bukti Pembayaran</a>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="room_id">Kamar <b
-                                                                                    class="text-danger">*</b></label>
-                                                                            <select name="room_id" id="room_id"
-                                                                                class="form-control">
-                                                                                <option value="">Pilih kamar penghuni
-                                                                                </option>
-                                                                                @foreach ($rooms as $room)
-                                                                                    @if (
-                                                                                        ($residency->user->profile->gender == 'M' && $room->room_type == 'M') ||
-                                                                                            ($residency->user->profile->gender == 'F' && $room->room_type == 'F'))
-                                                                                        @if ($room->status == 'available')
-                                                                                            <option
-                                                                                                value="{{ $room->id }}">
-                                                                                                {{ $room->name }}
-                                                                                            </option>
-                                                                                        @endif
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    @endif
-                                                                @endif
-                                                            </div>
-                                                            <div class="modal-footer justify-content-between">
-                                                                <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">Tutup</button>
-                                                                @if ($residency->payment_status == 'Sudah Bayar')
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">Verifikasi</button>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         @endif
                                     @endif
 

@@ -28,6 +28,64 @@
                 <h3 class="card-title">Penghuni</h3>
             </div>
             <div class="card-body">
+                @if ($user->userRoom && optional($appliedResidency)->status == 'accepted')
+                    <div class="row">
+                        <!-- Detail Info Kamar -->
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Informasi Kamar</h3>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td>Nama Kamar</td>
+                                            <td>:</td>
+                                            <td>{{ $user->userRoom->room->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Penempatan</td>
+                                            <td>:</td>
+                                            <td>
+                                                @if ($user->profile->gender == 'M' && $user->userRoom->room->room_type == 'M')
+                                                    Asrama Putra
+                                                @elseif ($user->profile->gender == 'F' && $user->userRoom->room->room_type == 'F')
+                                                    Asrama Putri
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal Masuk</td>
+                                            <td>:</td>
+                                            <td>{{ Carbon\Carbon::parse($user->userRoom->created_at)->isoFormat('D MMMM YYYY') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Akhir Sewa</td>
+                                            <td>:</td>
+                                            <td>{{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if (optional($appliedResidency)->status == 'rejected')
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <p>Pengajuan Anda ditolak. {{ optional($appliedResidency)->reason }}</p>
+                            <form action="{{ route('user.penghuni.update') }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-primary">Ajukan Kembali</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+
                 @if (!$dataLengkap)
                     <div class="d-flex justify-content-center">
                         <div class="alert alert-warning text-center" style="width: 100%;">
@@ -47,62 +105,29 @@
                                 </form>
                             </div>
                         </div>
-                    @elseif ($appliedResidency->status == 'pending')
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="text-center">
-                                <p>Pengajuan Anda sedang kami periksa.</p>
-                            </div>
-                        </div>
-                    @elseif ($appliedResidency->status == 'accepted')
-                        @if ($user->userRoom)
-                            <div class="row">
-
-                                <!-- Detail Info Kamar -->
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Informasi Kamar</h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <table class="table table-striped">
-                                                <tr>
-                                                    <td>Nama Kamar</td>
-                                                    <td>:</td>
-                                                    <td>{{ $user->userRoom->room->name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Penempatan</td>
-                                                    <td>:</td>
-                                                    <td>
-                                                        @if ($user->profile->gender == 'M' && $user->userRoom->room->room_type == 'M')
-                                                            Asrama Putra
-                                                        @elseif ($user->profile->gender == 'F' && $user->userRoom->room->room_type == 'F')
-                                                            Asrama Putri
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Tanggal Masuk</td>
-                                                    <td>:</td>
-                                                    <td>{{ Carbon\Carbon::parse($user->userRoom->created_at)->isoFormat('D MMMM YYYY') }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Akhir Sewa</td>
-                                                    <td>:</td>
-                                                    <td>{{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
+                    @elseif ($appliedResidency)
+                        @if ($appliedResidency->status == 'pending')
                             <div class="d-flex justify-content-center align-items-center">
                                 <div class="text-center">
-                                    <p>Pengajuan Anda telah disetujui.</p>
-
+                                    <p>Pengajuan Anda sedang kami periksa.</p>
+                                </div>
+                            </div>
+                        @elseif ($hasPaid)
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="text-center">
+                                    <p>Pembayaran Anda sedang kami periksa.</p>
+                                </div>
+                            </div>
+                        @elseif ($appliedResidency->status == 'pending-payment')
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="text-center">
+                                    @if ($rejectedPayment)
+                                        <p><strong>Perhatian!</strong> Bukti pembayaran Anda sebelumnya ditolak. Silakan
+                                            unggah bukti pembayaran baru.</p>
+                                    @elseif (!$hasPaid)
+                                        <p>Pengajuan Anda telah disetujui. Silakan melakukan pembayaran untuk menjadi
+                                            penghuni.</p>
+                                    @endif
                                     <!-- Informasi Pembayaran -->
                                     <table class="table table-bordered table-striped">
                                         <thead>
@@ -130,6 +155,7 @@
                                         </tbody>
                                     </table>
 
+                                    <!-- Form untuk upload bukti pembayaran -->
                                     <form action="{{ route('user.penghuni.payment') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
@@ -147,12 +173,6 @@
                                 </div>
                             </div>
                         @endif
-                    @elseif ($appliedResidency->status == 'rejected')
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="text-center">
-                                <p>Pengajuan Anda ditolak.</p>
-                            </div>
-                        </div>
                     @endif
                 @endif
             </div>

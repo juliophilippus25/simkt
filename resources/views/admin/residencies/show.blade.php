@@ -105,15 +105,24 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Tanggal Pembayaran</th>
+                            <th>Waktu Pembayaran</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($user->payment as $payment)
+                        @foreach ($payments as $payment)
                             <tr>
-                                <td>{{ Carbon\Carbon::parse($payment->created_at)->isoFormat('D MMMM YYYY') }}</td>
-                                <td>{{ $payment->is_accepted ? 'Diterima' : 'Belum Diterima' }}</td>
+                                <td>{{ Carbon\Carbon::parse($payment->created_at)->isoFormat('D MMMM YYYY') }} -
+                                    {{ \Carbon\Carbon::parse($payment->created_at)->format('H:i') }} WIB</td>
+                                <td>
+                                    @if ($payment->status == 'pending')
+                                        <span class="badge bg-info">Proses</span>
+                                    @elseif ($payment->status == 'rejected')
+                                        <span class="badge bg-danger">Ditolak</span>
+                                    @elseif ($payment->status == 'accepted')
+                                        <span class="badge bg-success">Diterima</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

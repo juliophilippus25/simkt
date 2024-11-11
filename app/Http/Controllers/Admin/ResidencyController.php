@@ -22,6 +22,7 @@ class ResidencyController extends Controller
 
         foreach ($residencies as $residency) {
             $payment = Payment::where('user_id', $residency->user_id)
+                              ->where('status', 'pending')
                               ->orderBy('created_at', 'desc')
                               ->first();
 
@@ -57,7 +58,7 @@ class ResidencyController extends Controller
 
         $appliedResidency->verified_by = $adminId;
         $appliedResidency->verified_at = now();
-        $appliedResidency->status = 'accepted';
+        $appliedResidency->status = 'pending-payment';
         $appliedResidency->save();
 
         toast('Pengajuan penghuni berhasil diverifikasi.','success')->timerProgressBar()->autoClose(5000);
@@ -84,6 +85,20 @@ class ResidencyController extends Controller
         return redirect()->back();
     }
 
+    public function verifyOrReject(Request $request, $id)
+    {
+        $action = $request->input('action');
+
+        if ($action == 'verify') {
+            return $this->verifyWithRoom($request, $id);
+        } elseif ($action == 'reject') {
+            return $this->rejectPayment($id);
+        }
+
+        toast('Aksi tidak dikenali.','error')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
+    }
+
     public function verifyWithRoom(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -98,8 +113,13 @@ class ResidencyController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $appliedResidency = ApplyResidency::where('user_id', $id)->first();
+        $appliedResidency->status = 'accepted';
+        $appliedResidency->save();
+
         $payment = Payment::where('user_id', $id)
-                        ->where('is_accepted', false)
+                        ->orderBy('created_at', 'desc')
+                        ->where('status', 'pending')
                         ->first();
 
         if (!$payment) {
@@ -107,7 +127,7 @@ class ResidencyController extends Controller
             return redirect()->back();
         }
 
-        $payment->is_accepted = true;
+        $payment->status = 'accepted';
         $payment->save();
 
         $room = Room::findOrFail($request->room_id);
@@ -128,6 +148,20 @@ class ResidencyController extends Controller
         return redirect()->back();
     }
 
+    public function rejectPayment($id)
+    {
+        $appliedResidency = ApplyResidency::where('user_id', $id)->first();
+        $appliedResidency->status = 'pending-payment';
+        $appliedResidency->save();
+
+        $payment = Payment::where('user_id', $id)->first();
+        $payment->status = 'rejected';
+        $payment->save();
+
+        toast('Pengajuan pembayaran ditolak.','success')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
+    }
+
     public function show($id)
     {
         $dataType = 'pengajuan';
@@ -135,7 +169,11 @@ class ResidencyController extends Controller
         $user = User::with(['profile', 'applyResidency', 'userRoom', 'payment'])
                 ->findOrFail($id);
 
-        return view('admin.residencies.show', compact('dataType', 'user'));
+        $payments = Payment::where('user_id', $id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('admin.residencies.show', compact('dataType', 'user', 'payments'));
     }
 
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_id', 100);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('proof');
-            $table->boolean('is_accepted')->default(false);
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

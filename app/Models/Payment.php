@@ -13,7 +13,7 @@ class Payment extends Model
         'id',
         'user_id',
         'proof',
-        'is_accepted'
+        'status'
     ];
 
     public function user()

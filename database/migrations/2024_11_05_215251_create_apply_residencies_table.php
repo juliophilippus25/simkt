@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('verified_by', 100)->nullable();
             $table->foreign('verified_by')->references('id')->on('admins')->onDelete('set null');
             $table->timestamp('verified_at')->nullable();
-            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'pending-payment', 'accepted', 'rejected'])->default('pending');
             $table->text('reason')->nullable();
             $table->timestamps();
         });

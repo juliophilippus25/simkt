@@ -14,18 +14,14 @@ use Illuminate\Support\Facades\Validator;
 class ResidencyController extends Controller
 {
     public function index() {
-        // Ambil ID pengguna yang sedang login
         $userId = auth('user')->user()->id;
 
-        // Memuat profil, pengajuan residensi, kamar, dan pembayaran pengguna
         $user = User::with(['profile', 'applyResidency', 'userRoom', 'payment'])
                     ->where('id', $userId)
-                    ->firstOrFail(); // Gunakan firstOrFail untuk memastikan pengguna ditemukan
+                    ->firstOrFail();
 
-        // Cek apakah data profil lengkap
         $dataLengkap = false;
 
-        // Pastikan userProfile tersedia
         if ($user->profile) {
             $dataLengkap = $user->profile->name && $user->profile->phone && $user->profile->birth_date
                 && $user->profile->gender && $user->profile->regency_id
@@ -34,14 +30,21 @@ class ResidencyController extends Controller
                 && $user->profile->active_student && $user->profile->photo;
         }
 
-        // Cek apakah ada pengajuan residensi untuk user ini
+        $hasPaid = Payment::where('user_id', $userId)
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $rejectedPayment = Payment::where('user_id', $userId)
+            ->where('status', 'rejected')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
         $appliedResidency = ApplyResidency::where('user_id', $userId)->first();
 
-        // Tentukan tipe data untuk tampilan
         $dataType = 'pengajuan';
 
-        // Kembalikan data ke tampilan dengan variabel yang diperlukan
-        return view('user.penghuni.index', compact('dataType', 'dataLengkap', 'appliedResidency', 'user'));
+        return view('user.penghuni.index', compact('dataType', 'dataLengkap', 'appliedResidency', 'user', 'hasPaid', 'rejectedPayment'));
     }
 
 
@@ -59,6 +62,20 @@ class ResidencyController extends Controller
         $applyResidency->id = strtoupper(hash('sha256', "!@#!@#" . Carbon::now()->format('YmdH:i:s')));
         $applyResidency->user_id = $userId;
         $applyResidency->save();
+
+        toast('Pengajuan berhasil.','success')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
+    }
+
+    public function restoreApplyResidency() {
+        $userId = auth('user')->user()->id;
+
+        $existingApplication = ApplyResidency::where('user_id', $userId)->where('status', 'rejected')->first();
+
+        $existingApplication->verified_by = NULL;
+        $existingApplication->verified_at = NULL;
+        $existingApplication->status = 'pending';
+        $existingApplication->save();
 
         toast('Pengajuan berhasil.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();
