@@ -67,6 +67,7 @@ class ProfileController extends Controller
         $userId = auth('user')->user()->id;
         $user = User::findOrFail($userId);
 
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'ktp' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
             'family_card' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
@@ -99,7 +100,7 @@ class ProfileController extends Controller
             $ktp = $request->file('ktp')->storeAs('users/ktp', $fileName);
             $ktp = $fileName;
         } else {
-            $ktp = NULL;
+            $ktp = $user->profile->ktp;
         }
 
         if ($request->hasFile('family_card') && $request->file('family_card')->isValid()) {
@@ -112,7 +113,7 @@ class ProfileController extends Controller
             $family_card = $request->file('family_card')->storeAs('users/kartu-keluarga', $fileName);
             $family_card = $fileName;
         } else {
-            $family_card = NULL;
+            $family_card = $user->profile->family_card;
         }
 
         if ($request->hasFile('active_student') && $request->file('active_student')->isValid()) {
@@ -125,7 +126,7 @@ class ProfileController extends Controller
             $active_student = $request->file('active_student')->storeAs('users/surat-aktif', $fileName);
             $active_student = $fileName;
         } else {
-            $active_student = NULL;
+            $active_student = $user->profile->active_student;
         }
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
@@ -138,7 +139,7 @@ class ProfileController extends Controller
             $photo = $request->file('photo')->storeAs('users/foto', $fileName);
             $photo = $fileName;
         } else {
-            $photo = NULL;
+            $photo = $user->profile->photo;
         }
 
         $profile = $user->profile;

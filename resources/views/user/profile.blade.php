@@ -322,7 +322,7 @@
                                                                 <div class="custom-file">
                                                                     <input type="file" id="ktp"
                                                                         class="custom-file-input @error('ktp') is-invalid @enderror"
-                                                                        name="ktp">
+                                                                        name="ktp" value="{{ $user->profile->ktp }}">
                                                                     <label class="custom-file-label" for="ktp">Pilih
                                                                         file KTP</label>
                                                                 </div>
