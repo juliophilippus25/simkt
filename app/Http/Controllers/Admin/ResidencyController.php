@@ -118,8 +118,8 @@ class ResidencyController extends Controller
         $appliedResidency->save();
 
         $payment = Payment::where('user_id', $id)
-                        ->orderBy('created_at', 'desc')
                         ->where('status', 'pending')
+                        ->orderBy('created_at', 'desc')
                         ->first();
 
         if (!$payment) {
@@ -154,7 +154,7 @@ class ResidencyController extends Controller
         $appliedResidency->status = 'pending-payment';
         $appliedResidency->save();
 
-        $payment = Payment::where('user_id', $id)->first();
+        $payment = Payment::where('user_id', $id)->orderBy('created_at', 'desc')->first();
         $payment->status = 'rejected';
         $payment->save();
 
