@@ -34,12 +34,14 @@ class RejectApplicactionWithoutPayment extends Command
 
         foreach ($applications as $application) {
             $payment = Payment::where('user_id', $application->user_id)
-                ->where('created_at', '>=', $application->created_at)
-                ->where('created_at', '<=', Carbon::parse($application->created_at)->addDays(3))
+                ->where('created_at', '>=', $application->updated_at)
+                ->where('created_at', '<=', Carbon::parse($application->updated_at)->addDays(3))
                 ->whereNotNull('proof')
                 ->first();
 
             if (!$payment) {
+                $application->verified_by = NULL;
+                $application->verified_at = NULL;
                 $application->status = 'rejected';
                 $application->reason = 'Mohon maaf, pengajuan Anda di tolak karena belum melakukan pembayaran.';
                 $application->save();

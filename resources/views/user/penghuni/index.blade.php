@@ -24,9 +24,9 @@
     <section class="content">
         <!-- Default box -->
         <div class="card">
-            <div class="card-header">
+            {{-- <div class="card-header">
                 <h3 class="card-title">Penghuni</h3>
-            </div>
+            </div> --}}
             <div class="card-body">
                 @if ($user->userRoom && optional($appliedResidency)->status == 'accepted')
                     <div class="row">
@@ -153,10 +153,10 @@
                                                 <td>Rp. 250.000</td>
                                             </tr>
                                             <tr>
-                                                <td class="text-center" colspan="2">
-                                                    <strong>Waktu tersisa
+                                                <td class="text-center" style="color: orange;" colspan="2">
+                                                    <strong>Lakukan pembayaran dalam waktu
                                                         <span class="badge badge-danger" id="countdown-timer">
-                                                            {{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->setTime(8, 0)->setTimezone('Asia/Jakarta')->toIso8601String() }}
+                                                            ...
                                                         </span>
                                                     </strong>
                                                 </td>
@@ -229,7 +229,7 @@
     <script>
         // Mengambil waktu deadline yang telah di-set di PHP sebagai waktu UTC
         var deadline = new Date(
-            "{{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->setTime(8, 0)->setTimezone('Asia/Jakarta')->toIso8601String() }}"
+            "{{ Carbon\Carbon::parse($appliedResidency->updated_at)->addDays(3) }}"
         );
 
         // Fungsi untuk format countdown dalam format "X hari Y jam Z menit"
@@ -255,7 +255,7 @@
 
             if (remainingTime <= 0) {
                 clearInterval(countdownInterval);
-                document.getElementById("countdown-timer").innerHTML = "Waktu Habis";
+                document.getElementById("countdown-timer").innerHTML = "WAKTU HABIS";
             } else {
                 document.getElementById("countdown-timer").innerHTML = formatCountdown(remainingTime);
             }
