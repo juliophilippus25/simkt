@@ -53,15 +53,15 @@
                                 <td>{{ \Carbon\Carbon::parse($residency->created_at)->isoFormat('D MMMM YYYY') }}</td>
                                 <td>
                                     @if ($residency->status == 'pending')
-                                        <span class="badge badge-info">Proses</span>
+                                        <span class="badge badge-info">PROSES</span>
                                     @elseif ($residency->status == 'pending-payment' && $residency->payment_proof)
-                                        <span class="badge badge-info">Pembayaran diterima</span>
+                                        <span class="badge badge-info">PEMBAYARAN MASUK</span>
                                     @elseif ($residency->status == 'pending-payment')
-                                        <span class="badge badge-warning">Menunggu pembayaran</span>
+                                        <span class="badge badge-warning">MENUNGGU PEMBAYARAN</span>
                                     @elseif ($residency->status == 'accepted')
-                                        <span class="badge badge-success">Disetujui</span>
+                                        <span class="badge badge-success">DISETUJUI</span>
                                     @elseif ($residency->status == 'rejected')
-                                        <span class="badge badge-danger">Ditolak</span>
+                                        <span class="badge badge-danger">DITOLAK</span>
                                     @endif
                                 </td>
                                 <td>

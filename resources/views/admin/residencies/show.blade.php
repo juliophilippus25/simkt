@@ -116,11 +116,11 @@
                                     {{ \Carbon\Carbon::parse($payment->created_at)->format('H:i') }} WIB</td>
                                 <td>
                                     @if ($payment->status == 'pending')
-                                        <span class="badge bg-info">Proses</span>
+                                        <span class="badge bg-warning">PENDING</span>
                                     @elseif ($payment->status == 'rejected')
-                                        <span class="badge bg-danger">Ditolak</span>
+                                        <span class="badge bg-danger">GAGAL</span>
                                     @elseif ($payment->status == 'accepted')
-                                        <span class="badge bg-success">Diterima</span>
+                                        <span class="badge bg-success">BERHASIL</span>
                                     @endif
                                 </td>
                             </tr>
