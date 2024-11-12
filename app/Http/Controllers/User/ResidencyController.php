@@ -41,12 +41,12 @@ class ResidencyController extends Controller
             ->first();
 
         $appliedResidency = ApplyResidency::where('user_id', $userId)->first();
+        $deadline = Carbon::parse($appliedResidency->updated_at)->addDays(3);
 
         $dataType = 'pengajuan';
 
-        return view('user.penghuni.index', compact('dataType', 'dataLengkap', 'appliedResidency', 'user', 'hasPaid', 'rejectedPayment'));
+        return view('user.penghuni.index', compact('dataType', 'dataLengkap', 'appliedResidency', 'user', 'hasPaid', 'rejectedPayment', 'deadline'));
     }
-
 
     public function storeApplyResidency() {
         $userId = auth('user')->user()->id;

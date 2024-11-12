@@ -172,22 +172,23 @@
                                         </tbody>
                                     </table>
 
+                                    @if (now()->lessThanOrEqualTo($deadline))
+                                        <form action="{{ route('user.penghuni.payment') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="proof">Upload Bukti Pembayaran <b
+                                                        class="text-danger">*</b></label>
+                                                <input type="file" name="proof" id="proof" class="form-control"
+                                                    required>
+                                            </div>
 
-                                    <!-- Form untuk upload bukti pembayaran -->
-                                    <form action="{{ route('user.penghuni.payment') }}" method="POST"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="proof">Upload Bukti Pembayaran <b
-                                                    class="text-danger">*</b></label>
-                                            <input type="file" name="proof" id="proof" class="form-control"
-                                                required>
-                                        </div>
-
-                                        <div class="form-group mt-3">
-                                            <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
-                                        </div>
-                                    </form>
+                                            <div class="form-group mt-3">
+                                                <button type="submit" class="btn btn-primary">Kirim Bukti
+                                                    Pembayaran</button>
+                                            </div>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         @endif
