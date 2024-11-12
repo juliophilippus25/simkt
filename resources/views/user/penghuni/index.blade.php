@@ -22,113 +22,146 @@
 
     <!-- Main content -->
     <section class="content">
-        <!-- Default box -->
         <div class="card">
-            {{-- <div class="card-header">
-                <h3 class="card-title">Penghuni</h3>
-            </div> --}}
             <div class="card-body">
                 @if ($user->userRoom && optional($appliedResidency)->status == 'accepted')
                     <div class="row">
-                        <!-- Detail Info Kamar -->
+                        <!-- Info Kamar -->
                         <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Informasi Kamar</h3>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <td>Nama Kamar</td>
-                                            <td>:</td>
-                                            <td>{{ $user->userRoom->room->name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Penempatan</td>
-                                            <td>:</td>
-                                            <td>
-                                                @if ($user->profile->gender == 'M' && $user->userRoom->room->room_type == 'M')
-                                                    Asrama Putra
-                                                @elseif ($user->profile->gender == 'F' && $user->userRoom->room->room_type == 'F')
-                                                    Asrama Putri
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tanggal Masuk</td>
-                                            <td>:</td>
-                                            <td>{{ Carbon\Carbon::parse($user->userRoom->created_at)->isoFormat('D MMMM YYYY') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Akhir Sewa</td>
-                                            <td>:</td>
-                                            <td>{{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
-                                            </td>
-                                        </tr>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="text-center">Informasi Kamar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Nama Kamar</strong></td>
+                                        <td>{{ $user->userRoom->room->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Penempatan</strong></td>
+                                        <td>
+                                            @if ($user->profile->gender == 'M' && $user->userRoom->room->room_type == 'M')
+                                                Asrama Putra
+                                            @elseif ($user->profile->gender == 'F' && $user->userRoom->room->room_type == 'F')
+                                                Asrama Putri
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tanggal Masuk</strong></td>
+                                        <td>{{ Carbon\Carbon::parse($user->userRoom->created_at)->isoFormat('D MMMM YYYY') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Akhir Sewa</strong></td>
+                                        <td>{{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Info Pembayaran -->
+                        @if (!now()->lessThanOrEqualTo($subDays))
+                            <div class="col-md-6">
+                                <!-- Pembayaran Status -->
+                                @if ($pendingPayment)
+                                    <p class="text-bold  text-center">
+                                        Pembayaran Anda
+                                        sedang
+                                        kami periksa.</p>
+                                @else
+                                    <!-- Form Upload Bukti Pembayaran -->
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2" class="text-center">Informasi Pembayaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Bank</strong></td>
+                                                <td>BRI</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Atas Nama</strong></td>
+                                                <td>Dora</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Nomor Rekening</strong></td>
+                                                <td>1234-5678-9101</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Bayar</strong></td>
+                                                <td>Rp. 250.000</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
-                                </div>
+
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <form action="{{ route('user.penghuni.payment') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label for="proof">Upload Bukti Pembayaran <b
+                                                        class="text-danger">*</b></label>
+                                                <input type="file" name="proof" id="proof" class="form-control"
+                                                    required>
+                                            </div>
+
+                                            <div class="form-group mt-3">
+                                                <button type="submit" class="btn btn-primary">Kirim Bukti
+                                                    Pembayaran</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
-                        </div>
+                        @endif
                     </div>
                 @endif
 
+                <!-- Pengajuan Ditolak -->
                 @if (optional($appliedResidency)->status == 'rejected')
-                    <div class="d-flex justify-content-center align-items-center">
-                        <div class="text-center">
-                            <p>Pengajuan Anda ditolak. {{ optional($appliedResidency)->reason }}</p>
-                            <form action="{{ route('user.penghuni.update') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <button type="submit" class="btn btn-primary">Ajukan Kembali</button>
-                            </form>
-                        </div>
+                    <div class="text-center">
+                        <p class="text-bold text-danger">Pengajuan Anda ditolak. {{ optional($appliedResidency)->reason }}
+                        </p>
+                        <form action="{{ route('user.penghuni.update') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-primary">Ajukan Kembali</button>
+                        </form>
                     </div>
                 @endif
 
-                @if (!$dataLengkap)
-                    <div class="d-flex justify-content-center">
-                        <div class="alert alert-warning text-center" style="width: 100%;">
-                            <p><strong>Perhatian!</strong> Lengkapi data Anda terlebih dahulu.</p>
-                            <a href="{{ route('user.profile') }}" class="btn btn-primary"
-                                style="text-decoration: none;">Klik disini</a>
-                        </div>
+                <!-- Profil Belum Lengkap -->
+                @if (!$isProfileComplete)
+                    <div class="alert alert-warning text-center">
+                        <p><strong>Perhatian!</strong> Lengkapi data Anda terlebih dahulu.</p>
+                        <a href="{{ route('user.profile') }}" class="btn btn-primary">Klik disini</a>
                     </div>
                 @else
+                    <!-- Pengajuan Tidak Ada atau Status Pengajuan -->
                     @if (!$appliedResidency)
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="text-center">
-                                <p>Data sudah lengkap, Anda dapat mengajukan sebagai penghuni.</p>
-                                <form action="{{ route('user.penghuni.apply') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary">Ajukan</button>
-                                </form>
-                            </div>
+                        <div class="text-center">
+                            <p>Data sudah lengkap, Anda dapat mengajukan sebagai penghuni.</p>
+                            <form action="{{ route('user.penghuni.apply') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Ajukan</button>
+                            </form>
                         </div>
-                    @elseif ($appliedResidency)
-                        @if ($appliedResidency->status == 'pending')
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="text-center">
-                                    <p>Pengajuan Anda sedang kami periksa.</p>
-                                </div>
-                            </div>
-                        @elseif ($hasPaid)
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="text-center">
-                                    <p>Pembayaran Anda sedang kami periksa.</p>
-                                </div>
-                            </div>
-                        @elseif ($appliedResidency->status == 'pending-payment')
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="text-center">
-                                    @if ($rejectedPayment)
-                                        <p><strong>Perhatian!</strong> Bukti pembayaran Anda sebelumnya ditolak. Silakan
-                                            unggah bukti pembayaran baru.</p>
-                                    @elseif (!$hasPaid)
-                                        <p>Pengajuan Anda telah disetujui. Silakan melakukan pembayaran untuk menjadi
-                                            penghuni.</p>
-                                    @endif
-                                    <!-- Informasi Pembayaran -->
+                    @elseif ($appliedResidency->status == 'pending')
+                        <div class="text-center text-bold ">
+                            <p>Pengajuan Anda sedang kami periksa.</p>
+                        </div>
+                    @elseif ($appliedResidency->status == 'pending-payment')
+                        <div class="text-center">
+                            @if ($rejectedPayment)
+                                @if (!$pendingPayment)
+                                    <p><strong>Perhatian!</strong> Bukti pembayaran Anda sebelumnya ditolak. Silakan unggah
+                                        bukti pembayaran baru.</p>
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -155,93 +188,113 @@
                                             <tr>
                                                 <td class="text-center" style="color: orange;" colspan="2">
                                                     <strong>Lakukan pembayaran dalam waktu
-                                                        <span class="badge badge-danger" id="countdown-timer">
-                                                            ...
-                                                        </span>
+                                                        <span class="badge badge-danger" id="countdown-timer">...</span>
                                                     </strong>
                                                 </td>
-                                                {{-- <td class="text-center" colspan="2">
-                                                    <strong>Bayar sebelum
-                                                        <span class="badge badge-danger">
-                                                            {{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->isoFormat('D MMMM YYYY') }}
-                                                            - Jam 08:00
-                                                        </span>
-                                                    </strong>
-                                                </td> --}}
                                             </tr>
                                         </tbody>
                                     </table>
 
-                                    @if (now()->lessThanOrEqualTo($deadline))
-                                        <form action="{{ route('user.penghuni.payment') }}" method="POST"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="proof">Upload Bukti Pembayaran <b
-                                                        class="text-danger">*</b></label>
-                                                <input type="file" name="proof" id="proof" class="form-control"
-                                                    required>
-                                            </div>
+                                    <form action="{{ route('user.penghuni.payment') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="proof">Upload Bukti Pembayaran <b
+                                                    class="text-danger">*</b></label>
+                                            <input type="file" name="proof" id="proof" class="form-control"
+                                                required>
+                                        </div>
 
-                                            <div class="form-group mt-3">
-                                                <button type="submit" class="btn btn-primary">Kirim Bukti
-                                                    Pembayaran</button>
-                                            </div>
-                                        </form>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
+                                        <div class="form-group mt-3">
+                                            <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
+                                        </div>
+                                    </form>
+                                @else
+                                    <p class="text-bold ">
+                                        Pembayaran Anda
+                                        sedang
+                                        kami periksa.
+                                    </p>
+                                @endif
+                            @else
+                                @if (now()->lessThanOrEqualTo($residencyDeadline) && !$pendingPayment)
+                                    <p class="text-bold">
+                                        Pengajuan Anda telah disetujui. Silakan melakukan pembayaran untuk menjadi penghuni.
+                                    </p>
+                                    <!-- Informasi Pembayaran dan Countdown -->
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2" class="text-center">Informasi Pembayaran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Bank</strong></td>
+                                                <td>BRI</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Atas Nama</strong></td>
+                                                <td>Dora</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Nomor Rekening</strong></td>
+                                                <td>1234-5678-9101</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Bayar</strong></td>
+                                                <td>Rp. 250.000</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center" style="color: orange;" colspan="2">
+                                                    <strong>Lakukan pembayaran dalam waktu
+                                                        <span class="badge badge-danger" id="countdown-timer">...</span>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <form action="{{ route('user.penghuni.payment') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="proof">Upload Bukti Pembayaran <b
+                                                    class="text-danger">*</b></label>
+                                            <input type="file" name="proof" id="proof" class="form-control"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group mt-3">
+                                            <button type="submit" class="btn btn-primary">Kirim Bukti Pembayaran</button>
+                                        </div>
+                                    </form>
+                                @elseif($pendingPayment)
+                                    <p class="text-bold text-bold">Pembayaran Anda sedang kami periksa.</p>
+                                @endif
+                            @endif
+                        </div>
                     @endif
                 @endif
             </div>
         </div>
-        <!-- /.card -->
     </section>
-    <!-- /.content -->
 
 @section('script')
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "language": {
-                    search: "Cari", // Label pencarian
-                    searchPlaceholder: "Cari {{ $dataType }}", // Placeholder pencarian
-                    lengthMenu: "Tampilkan _MENU_ data per halaman", // Menu jumlah data per halaman
-                    info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ {{ $dataType }}", // Info pagination
-                    infoEmpty: "Tidak ada {{ $dataType }} yang tersedia", // Pesan saat tidak ada data
-                    infoFiltered: "(difilter dari _MAX_ total data)", // Pesan saat data difilter
-                    zeroRecords: "Tidak ada {{ $dataType }} yang ditemukan.", // Pesan saat tidak ada hasil
-                    emptyTable: "Tidak ada {{ $dataType }} yang tersedia di tabel.",
-                    paginate: { // Opsi untuk pagination
-                        first: "Pertama", // Tombol "First"
-                        previous: "Sebelumnya", // Tombol "Previous"
-                        next: "Berikutnya", // Tombol "Next"
-                        last: "Terakhir" // Tombol "Last"
-                    }
-                }
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
-    </script>
+        // Menggunakan pengecekan apakah $appliedResidency atau $residencyDeadline ada sebelum melanjutkan
+        @if (isset($appliedResidency) && isset($appliedResidency->updated_at))
+            var deadline = new Date("{{ Carbon\Carbon::parse($appliedResidency->updated_at)->addDays(3) }}");
+        @else
+            var deadline = new Date(); // Default fallback jika tidak ada deadline
+        @endif
 
-    <script>
-        // Mengambil waktu deadline yang telah di-set di PHP sebagai waktu UTC
-        var deadline = new Date(
-            "{{ Carbon\Carbon::parse($appliedResidency->updated_at)->addDays(3) }}"
-        );
-
-        // Fungsi untuk format countdown dalam format "X hari Y jam Z menit"
         function formatCountdown(ms) {
             var days = Math.floor(ms / (1000 * 60 * 60 * 24));
             var hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             var minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
 
             var countdownText = "";
-
-            // Menyusun format countdown dengan kondisi tertentu
             if (days > 0) countdownText += days + " hari ";
             if (hours > 0) countdownText += hours + " jam ";
             if (minutes > 0) countdownText += minutes + " menit";
@@ -249,7 +302,6 @@
             return countdownText;
         }
 
-        // Update countdown setiap 1 detik
         var countdownInterval = setInterval(function() {
             var now = new Date().getTime();
             var remainingTime = deadline - now;

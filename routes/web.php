@@ -35,6 +35,10 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::post('/verify-or-reject/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'verifyOrReject'])->name('admin.penghuni.verify-or-reject');
             Route::get('/detail/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'show'])->name('admin.penghuni.show');
         });
+
+        Route::prefix('/perpanjangan')->group(function () {
+           Route::get('/', [App\Http\Controllers\Admin\ExtensionController::class, 'index'])->name('admin.extension.index');
+        });
     });
 
     // Route User

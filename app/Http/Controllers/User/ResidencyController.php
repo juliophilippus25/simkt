@@ -6,46 +6,68 @@ use App\Http\Controllers\Controller;
 use App\Models\ApplyResidency;
 use App\Models\Payment;
 use App\Models\User;
-use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ResidencyController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $userId = auth('user')->user()->id;
 
-        $user = User::with(['profile', 'applyResidency', 'userRoom', 'payment'])
-                    ->where('id', $userId)
-                    ->firstOrFail();
+        $user = User::with([
+            'profile',
+            'applyResidency',
+            'userRoom',
+            'payment'
+        ])
+        ->findOrFail($userId);
 
-        $dataLengkap = false;
+        $isProfileComplete = $this->isProfileComplete($user->profile);
 
-        if ($user->profile) {
-            $dataLengkap = $user->profile->name && $user->profile->phone && $user->profile->birth_date
-                && $user->profile->gender && $user->profile->regency_id
-                && $user->profile->nim && $user->profile->university && $user->profile->major
-                && $user->profile->ktp && $user->profile->family_card
-                && $user->profile->active_student && $user->profile->photo;
-        }
-
-        $hasPaid = Payment::where('user_id', $userId)
+        $pendingPayment = Payment::where('user_id', $userId)
             ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
+            ->latest()
             ->first();
 
         $rejectedPayment = Payment::where('user_id', $userId)
             ->where('status', 'rejected')
-            ->orderBy('created_at', 'desc')
+            ->latest()
             ->first();
 
-        $appliedResidency = ApplyResidency::where('user_id', $userId)->first();
-        $deadline = Carbon::parse($appliedResidency->updated_at)->addDays(3);
+        $appliedResidency = $user->applyResidency;
+        $residencyDeadline = $appliedResidency ? Carbon::parse($appliedResidency->updated_at)->addDays(3) : null;
+
+        $userRoom = $user->userRoom;
+        $subDays = $userRoom ? Carbon::parse($userRoom->rent_period)->subDays(10) : null;
 
         $dataType = 'pengajuan';
 
-        return view('user.penghuni.index', compact('dataType', 'dataLengkap', 'appliedResidency', 'user', 'hasPaid', 'rejectedPayment', 'deadline'));
+        return view('user.penghuni.index', compact(
+            'dataType',
+            'isProfileComplete',
+            'appliedResidency',
+            'user',
+            'pendingPayment',
+            'rejectedPayment',
+            'residencyDeadline',
+            'subDays'
+        ));
+    }
+
+    private function isProfileComplete($profile)
+    {
+        if (!$profile) {
+            return false;
+        }
+
+        // Cek kelengkapan setiap field di profile
+        return $profile->name && $profile->phone && $profile->birth_date
+            && $profile->gender && $profile->regency_id
+            && $profile->nim && $profile->university && $profile->major
+            && $profile->ktp && $profile->family_card
+            && $profile->active_student && $profile->photo;
     }
 
     public function storeApplyResidency() {

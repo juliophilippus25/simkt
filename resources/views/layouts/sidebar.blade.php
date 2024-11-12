@@ -105,6 +105,16 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('admin.extension.index') }}"
+                            class="nav-link {{ request()->routeIs('admin.extension.index') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-invoice"></i>
+                            <p>
+                                Perpanjangan
+                            </p>
+                        </a>
+                    </li>
                 @endauth
 
                 @auth('user')
