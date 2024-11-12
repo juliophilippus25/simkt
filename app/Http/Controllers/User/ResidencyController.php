@@ -75,6 +75,7 @@ class ResidencyController extends Controller
         $existingApplication->verified_by = NULL;
         $existingApplication->verified_at = NULL;
         $existingApplication->status = 'pending';
+        $existingApplication->created_at = now();
         $existingApplication->save();
 
         toast('Pengajuan berhasil.','success')->timerProgressBar()->autoClose(5000);

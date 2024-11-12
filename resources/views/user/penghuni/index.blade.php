@@ -152,8 +152,26 @@
                                                 <td><strong>Total Bayar</strong></td>
                                                 <td>Rp. 250.000</td>
                                             </tr>
+                                            <tr>
+                                                <td class="text-center" colspan="2">
+                                                    <strong>Waktu tersisa
+                                                        <span class="badge badge-danger" id="countdown-timer">
+                                                            {{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->setTime(8, 0)->setTimezone('Asia/Jakarta')->toIso8601String() }}
+                                                        </span>
+                                                    </strong>
+                                                </td>
+                                                {{-- <td class="text-center" colspan="2">
+                                                    <strong>Bayar sebelum
+                                                        <span class="badge badge-danger">
+                                                            {{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->isoFormat('D MMMM YYYY') }}
+                                                            - Jam 08:00
+                                                        </span>
+                                                    </strong>
+                                                </td> --}}
+                                            </tr>
                                         </tbody>
                                     </table>
+
 
                                     <!-- Form untuk upload bukti pembayaran -->
                                     <form action="{{ route('user.penghuni.payment') }}" method="POST"
@@ -206,6 +224,42 @@
                 }
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
+    </script>
+
+    <script>
+        // Mengambil waktu deadline yang telah di-set di PHP sebagai waktu UTC
+        var deadline = new Date(
+            "{{ Carbon\Carbon::parse($appliedResidency->created_at)->addDays(3)->setTime(8, 0)->setTimezone('Asia/Jakarta')->toIso8601String() }}"
+        );
+
+        // Fungsi untuk format countdown dalam format "X hari Y jam Z menit"
+        function formatCountdown(ms) {
+            var days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+
+            var countdownText = "";
+
+            // Menyusun format countdown dengan kondisi tertentu
+            if (days > 0) countdownText += days + " hari ";
+            if (hours > 0) countdownText += hours + " jam ";
+            if (minutes > 0) countdownText += minutes + " menit";
+
+            return countdownText;
+        }
+
+        // Update countdown setiap 1 detik
+        var countdownInterval = setInterval(function() {
+            var now = new Date().getTime();
+            var remainingTime = deadline - now;
+
+            if (remainingTime <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown-timer").innerHTML = "Waktu Habis";
+            } else {
+                document.getElementById("countdown-timer").innerHTML = formatCountdown(remainingTime);
+            }
+        }, 1000);
     </script>
 @endsection
 
