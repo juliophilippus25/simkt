@@ -70,8 +70,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin.users') }}"
-                                    class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                                <a href="{{ route('admin.users.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }} || {{ request()->routeIs('admin.users.show') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penghuni</p>
                                 </a>

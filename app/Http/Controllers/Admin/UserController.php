@@ -39,4 +39,9 @@ class UserController extends Controller
         toast('Penghuni berhasil diverifikasi.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();
     }
+
+    public function show($id) {
+        $user = User::with('profile')->findOrFail($id);
+        return view('admin.user.show', compact('user'));
+    }
 }

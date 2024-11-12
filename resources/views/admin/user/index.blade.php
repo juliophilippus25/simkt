@@ -95,10 +95,8 @@
                                             </div>
                                         </div>
                                     @elseif ($user->is_verified == 1)
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal{{ $user->id }}" title="Detail">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        <a href="{{ route('admin.users.show', $user->id) }}"
+                                            class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                     @endif
                                 </td>
                             </tr>

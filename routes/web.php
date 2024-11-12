@@ -23,8 +23,9 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
         Route::prefix('/penghuni')->group(function () {
-            Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users');
+            Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
             Route::post('/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');
+            Route::get('/detail/{id}', [App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
         });
 
         Route::prefix('/pengajuan-penghuni')->group(function () {
