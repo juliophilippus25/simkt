@@ -218,7 +218,14 @@
                         next: "Berikutnya", // Tombol "Next"
                         last: "Terakhir" // Tombol "Last"
                     }
-                }
+                },
+                "order": [
+                    [2, 'desc']
+                ],
+                "columnDefs": [{
+                    "targets": 2,
+                    "type": "date"
+                }]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

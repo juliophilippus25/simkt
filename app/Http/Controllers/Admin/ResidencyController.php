@@ -78,7 +78,10 @@ class ResidencyController extends Controller
         $appliedResidency->verified_by = $adminId;
         $appliedResidency->verified_at = now();
         $appliedResidency->status = 'rejected';
-        $appliedResidency->reason = 'Mohon maaf, belum ada kamar yang tersedia.';
+        $appliedResidency->updated_at = now();
+        $appliedResidency->reason =
+        'Kami mohon maaf, pengajuan Anda tidak dapat diproses lebih lanjut saat ini karena tidak ada kamar  yang tersedia di asrama. Kami akan menginformasikan kepada Anda jika ada perubahan ketersediaan kamar di masa depan. Silakan ajukan kembali pengajuan Anda jika ada kesempatan atau ketersediaan kamar pada periode berikutnya. Terima kasih atas perhatian dan kesabaran Anda.';
+
         $appliedResidency->save();
 
         toast('Pengajuan penghuni berhasil ditolak.','success')->timerProgressBar()->autoClose(5000);
@@ -152,6 +155,7 @@ class ResidencyController extends Controller
     {
         $appliedResidency = ApplyResidency::where('user_id', $id)->first();
         $appliedResidency->status = 'pending-payment';
+        $appliedResidency->updated_at = now();
         $appliedResidency->save();
 
         $payment = Payment::where('user_id', $id)->orderBy('created_at', 'desc')->first();

@@ -46,13 +46,7 @@
                                         {{ $user->profile->name }}
                                     </a>
                                 </td>
-                                <td>
-                                    @if ($user->profile->gender == 'M')
-                                        Laki-laki
-                                    @else
-                                        Perempuan
-                                    @endif
-                                </td>
+                                <td>{{ $user->profile->gender == 'M' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 <td>
                                     {{ \Carbon\Carbon::parse($user->created_at)->isoFormat('D MMMM YYYY') }}
                                 </td>
@@ -118,21 +112,28 @@
                 "lengthChange": false,
                 "autoWidth": false,
                 "language": {
-                    search: "Cari", // Label pencarian
-                    searchPlaceholder: "Cari {{ $dataType }}", // Placeholder pencarian
-                    lengthMenu: "Tampilkan _MENU_ data per halaman", // Menu jumlah data per halaman
-                    info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ {{ $dataType }}", // Info pagination
-                    infoEmpty: "Tidak ada {{ $dataType }} yang tersedia", // Pesan saat tidak ada data
-                    infoFiltered: "(difilter dari _MAX_ total data)", // Pesan saat data difilter
-                    zeroRecords: "Tidak ada {{ $dataType }} yang ditemukan.", // Pesan saat tidak ada hasil
+                    search: "Cari",
+                    searchPlaceholder: "Cari {{ $dataType }}",
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    info: "Menampilkan _START_ hingga _END_ dari _TOTAL_ {{ $dataType }}",
+                    infoEmpty: "Tidak ada {{ $dataType }} yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    zeroRecords: "Tidak ada {{ $dataType }} yang ditemukan.",
                     emptyTable: "Tidak ada {{ $dataType }} yang tersedia di tabel.",
-                    paginate: { // Opsi untuk pagination
-                        first: "Pertama", // Tombol "First"
-                        previous: "Sebelumnya", // Tombol "Previous"
-                        next: "Berikutnya", // Tombol "Next"
-                        last: "Terakhir" // Tombol "Last"
+                    paginate: {
+                        first: "Pertama",
+                        previous: "Sebelumnya",
+                        next: "Berikutnya",
+                        last: "Terakhir"
                     }
-                }
+                },
+                "order": [
+                    [2, 'desc']
+                ],
+                "columnDefs": [{
+                    "targets": 2,
+                    "type": "date"
+                }]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

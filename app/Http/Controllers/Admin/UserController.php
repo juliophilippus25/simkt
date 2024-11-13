@@ -12,7 +12,8 @@ class UserController extends Controller
 {
     public function index() {
         $dataType = 'penghuni';
-        $users = User::with('profile')->get();
+        $users = User::with('profile')->orderBy('created_at', 'desc')->get();
+        // dd($users);
         return view('admin.user.index', compact('dataType', 'users'));
     }
 
