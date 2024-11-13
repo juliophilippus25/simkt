@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Perpajangan</h1>
+                    <h1>Perpanjangan</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -49,7 +49,48 @@
                                     @endif
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($payment->created_at)->isoFormat('D MMMM YYYY') }}</td>
-                                <td>Aksi</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#verifyModal{{ $payment->id }}" title="Verifikasi">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+
+                                    <!-- Modal Verifikasi Penghuni -->
+                                    <div class="modal fade" id="verifyModal{{ $payment->id }}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Verifikasi Pembayaran</h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label>Bukti Pembayaran:</label>
+                                                        <a href="{{ asset('storage/users/bukti-bayar/' . $payment->proof) }}"
+                                                            target="_blank">Lihat Bukti Pembayaran</a>
+                                                    </div>
+                                                    Apakah Anda yakin ingin verifikasi pembayaran
+                                                    <b>{{ $payment->user->profile->name }}</b>?
+                                                </div>
+                                                <div class="modal-footer justify-content-end">
+                                                    <form action="{{ route('admin.extension.reject', $payment->id) }}"
+                                                        method="POST" id="rejectForm{{ $payment->user->id }}">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger">Tolak</button>
+                                                    </form>
+                                                    <form action="{{ route('admin.extension.accept', $payment->id) }}"
+                                                        method="POST" id="acceptForm{{ $payment->user->id }}">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary">Terima</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

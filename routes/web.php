@@ -38,6 +38,8 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
 
         Route::prefix('/perpanjangan')->group(function () {
            Route::get('/', [App\Http\Controllers\Admin\ExtensionController::class, 'index'])->name('admin.extension.index');
+           Route::post('/accept/{id}', [App\Http\Controllers\Admin\ExtensionController::class, 'acceptPayment'])->name('admin.extension.accept');
+           Route::post('/reject/{id}', [App\Http\Controllers\Admin\ExtensionController::class, 'rejectPayment'])->name('admin.extension.reject');
         });
     });
 
