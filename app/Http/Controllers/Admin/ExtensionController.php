@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Extension;
 use App\Models\Payment;
+use App\Models\User;
 use App\Models\UserRoom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ExtensionController extends Controller
 {
@@ -28,6 +31,11 @@ class ExtensionController extends Controller
         $userRoom->rent_period = $userRoom->rent_period->addDays($userRoom->room->days_period);
         $userRoom->payment_id = $payment->id;
         $userRoom->save();
+
+        $user = User::with('profile')->where('id', $payment->user_id)->first();
+        $beforeExtension = $userRoom->rent_period->subDays($userRoom->room->days_period);
+
+        Mail::to($user->email)->send(new Extension($userRoom, $user, $beforeExtension));
 
         toast('Pembayaran perpanjangan berhasil diverifikasi.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();

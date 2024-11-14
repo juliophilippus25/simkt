@@ -56,3 +56,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::post('/upload-bukti-pembayaran', [App\Http\Controllers\User\ResidencyController::class, 'storePayment'])->name('user.penghuni.payment');
     });
 });
+
+Route::get('extension', function () {
+    return view('email.extension');
+});
