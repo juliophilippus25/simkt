@@ -16,4 +16,9 @@ class Room extends Model
         'room_type',
         'status'
     ];
+
+    public function userRooms()
+    {
+        return $this->hasMany(UserRoom::class);
+    }
 }

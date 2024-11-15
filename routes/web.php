@@ -28,6 +28,12 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::get('/detail/{id}', [App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
         });
 
+        Route::prefix('/asrama')->group(function () {
+            Route::get('/putra', [App\Http\Controllers\Admin\RoomController::class, 'getAsramaPutra'])->name('admin.room.putra');
+            Route::get('/putri', [App\Http\Controllers\Admin\RoomController::class, 'getAsramaPutri'])->name('admin.room.putri');
+            Route::get('/detail/{id}', [App\Http\Controllers\Admin\RoomController::class, 'show'])->name('admin.room.show');
+        });
+
         Route::prefix('/pengajuan-penghuni')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\ResidencyController::class, 'index'])->name('admin.penghuni.index');
             Route::post('/accept/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'acceptApplyResidency'])->name('admin.penghuni.accept');
@@ -55,8 +61,4 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::put('/update-pengajuan-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'restoreApplyResidency'])->name('user.penghuni.update');
         Route::post('/upload-bukti-pembayaran', [App\Http\Controllers\User\ResidencyController::class, 'storePayment'])->name('user.penghuni.payment');
     });
-});
-
-Route::get('extension', function () {
-    return view('email.extension');
 });

@@ -179,5 +179,4 @@ class ResidencyController extends Controller
 
         return view('admin.residencies.show', compact('dataType', 'user', 'payments'));
     }
-
 }

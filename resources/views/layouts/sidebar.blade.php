@@ -79,6 +79,33 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item {{ request()->is('admin/asrama*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('admin/asrama*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-bed"></i>
+                            <p>
+                                Asrama
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ">
+                                <a href="{{ route('admin.room.putra') }}"
+                                    class="nav-link {{ request()->routeIs('admin.room.putra') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Putra</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.room.putri') }}"
+                                    class="nav-link {{ request()->routeIs('admin.room.putri') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Putri</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item {{ request()->is('admin/pengajuan-penghuni*') ? 'menu-open' : '' }}">
                         <a href="#"
                             class="nav-link {{ request()->is('admin/pengajuan-penghuni*') ? 'active' : '' }}">
