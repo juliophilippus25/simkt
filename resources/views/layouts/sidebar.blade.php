@@ -90,7 +90,7 @@
                         <ul class="nav nav-treeview">
                             <li class="nav-item ">
                                 <a href="{{ route('admin.room.putra') }}"
-                                    class="nav-link {{ request()->routeIs('admin.room.putra') ? 'active' : '' }}">
+                                    class="nav-link {{ request()->routeIs('admin.room.putra') ? 'active' : '' }} || {{ request()->routeIs('admin.room.putra.show') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Putra</p>
                                 </a>
