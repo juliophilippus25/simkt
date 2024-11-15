@@ -35,4 +35,16 @@ class RoomController extends Controller
 
         return view('admin.room.show_putra', compact('user', 'payments'));
     }
+
+    public function showPutri($id)
+    {
+        $user = User::with(['profile', 'applyResidency', 'userRoom', 'payment'])
+                ->findOrFail($id);
+
+        $payments = Payment::where('user_id', $id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('admin.room.show_putri', compact('user', 'payments'));
+    }
 }

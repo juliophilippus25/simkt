@@ -32,6 +32,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::get('/putra', [App\Http\Controllers\Admin\RoomController::class, 'getAsramaPutra'])->name('admin.room.putra');
             Route::get('/putri', [App\Http\Controllers\Admin\RoomController::class, 'getAsramaPutri'])->name('admin.room.putri');
             Route::get('/putra/detail/{id}', [App\Http\Controllers\Admin\RoomController::class, 'showPutra'])->name('admin.room.putra.show');
+            Route::get('/putri/detail/{id}', [App\Http\Controllers\Admin\RoomController::class, 'showPutri'])->name('admin.room.putri.show');
         });
 
         Route::prefix('/pengajuan-penghuni')->group(function () {

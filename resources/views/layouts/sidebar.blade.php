@@ -98,7 +98,7 @@
 
                             <li class="nav-item">
                                 <a href="{{ route('admin.room.putri') }}"
-                                    class="nav-link {{ request()->routeIs('admin.room.putri') ? 'active' : '' }}">
+                                    class="nav-link {{ request()->routeIs('admin.room.putri') ? 'active' : '' }} || {{ request()->routeIs('admin.room.putri.show') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Putri</p>
                                 </a>
