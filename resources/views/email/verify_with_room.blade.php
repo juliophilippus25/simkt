@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpanjangan Sewa Berhasil</title>
+    <title>Pengajuan Penghuni dan Pembayaran Diterima</title>
     <style>
         * {
             box-sizing: border-box;
@@ -82,29 +82,31 @@
             <h1>{{ config('app.name') }}</h1>
         </div>
         <div class="content">
-            <h2>Hai, {{ $user->profile->name }}.</h2>
+            <h2>Hai, {{ $appliedResidency->user->profile->name }}.</h2>
             <p>
-                Selamat! Pembayaran perpanjangan Anda telah berhasil kami terima. Masa sewa Anda kini telah
-                diperpanjang, informasi lebih lanjut dapat dilihat pada menu <b>Penghuni</b>.
+                Selamat Anda telah bergabung di {{ $room->room_type == 'M' ? 'Asrama Putra' : 'Asrama Putri' }}
+                Kalimantan Tengah!
+                Pengajuan penghuni dan pembayaran Anda diterima. Informasi lebih lanjut dapat dilihat pada menu
+                <b>Penghuni</b>.
             </p>
-            <p>Informasi perpanjangan:</p>
+            <p>Informasi kamar Anda:</p>
             <table class="info-table">
                 <tr>
                     <td>Kamar</td>
                     <td>:</td>
-                    <td>{{ $user->userRoom->room->name }}</td>
+                    <td>{{ $room->name }}</td>
                 </tr>
                 <tr>
                     <td>Asrama</td>
                     <td>:</td>
-                    <td>{{ $user->userRoom->room->room_type == 'M' ? 'Putra' : 'Putri' }}</td>
+                    <td>{{ $room->room_type == 'M' ? 'Putra' : 'Putri' }}</td>
                 </tr>
                 <tr>
                     <td>Masa Sewa</td>
                     <td>:</td>
                     <td>
-                        {{ Carbon\Carbon::parse($beforeExtension)->isoFormat('D MMMM YYYY') }} -
-                        {{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
+                        {{ Carbon\Carbon::parse($now)->isoFormat('D MMMM YYYY') }} -
+                        {{ Carbon\Carbon::parse($userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
                     </td>
                 </tr>
             </table>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpanjangan Sewa Berhasil</title>
+    <title>Pembayaran Perpanjangan Ditolak</title>
     <style>
         * {
             box-sizing: border-box;
@@ -82,32 +82,14 @@
             <h1>{{ config('app.name') }}</h1>
         </div>
         <div class="content">
-            <h2>Hai, {{ $user->profile->name }}.</h2>
+            <h2>Hai, {{ $payment->user->profile->name }}.</h2>
             <p>
-                Selamat! Pembayaran perpanjangan Anda telah berhasil kami terima. Masa sewa Anda kini telah
-                diperpanjang, informasi lebih lanjut dapat dilihat pada menu <b>Penghuni</b>.
+                Kami mohon maaf, pembayaran perpanjangan sewa Anda telah ditolak. Anda dapat mengunggah bukti pembayaran
+                lagi. Informasi
+                lebih
+                lanjut dapat dilihat pada menu
+                <b>Penghuni</b>.
             </p>
-            <p>Informasi perpanjangan:</p>
-            <table class="info-table">
-                <tr>
-                    <td>Kamar</td>
-                    <td>:</td>
-                    <td>{{ $user->userRoom->room->name }}</td>
-                </tr>
-                <tr>
-                    <td>Asrama</td>
-                    <td>:</td>
-                    <td>{{ $user->userRoom->room->room_type == 'M' ? 'Putra' : 'Putri' }}</td>
-                </tr>
-                <tr>
-                    <td>Masa Sewa</td>
-                    <td>:</td>
-                    <td>
-                        {{ Carbon\Carbon::parse($beforeExtension)->isoFormat('D MMMM YYYY') }} -
-                        {{ Carbon\Carbon::parse($user->userRoom->rent_period)->isoFormat('D MMMM YYYY') }}
-                    </td>
-                </tr>
-            </table>
         </div>
         <div class="footer">
             <p>Salam hormat,</p>

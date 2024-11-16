@@ -174,13 +174,7 @@
                                                 </div>
                                             </form>
                                         </div>
-                                    @elseif ($residency->status == 'accepted')
-                                        @if ($residency->user->userRoom)
-                                            <a href="{{ route('admin.penghuni.show', $residency->user->id) }}"
-                                                class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>
-                                        @endif
                                     @endif
-
                                 </td>
                             </tr>
                         @endforeach
