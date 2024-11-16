@@ -25,14 +25,12 @@ class ProfileController extends Controller
         $user = User::findOrFail($userId);
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:3',
             'birth_date' => 'required|date|before:today',
             'regency_id' => 'required',
             'nim' => 'required|string',
             'university' => 'required|string',
             'major' => 'required|string',
         ], [
-            'name.required' => 'Nama lengkap harus diisi.',
             'name.min' => 'Nama lengkap minimal 3 karakter.',
             'birth_date.required' => 'Tanggal lahir harus diisi.',
             'birth_date.date' => 'Tanggal lahir tidak valid.',
@@ -50,7 +48,6 @@ class ProfileController extends Controller
         }
 
         $profile = $user->profile;
-        $profile->name = $request->name;
         $profile->birth_date = $request->birth_date;
         $profile->regency_id = $request->regency_id;
         $profile->nim = $request->nim;

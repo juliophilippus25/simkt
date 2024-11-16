@@ -67,6 +67,10 @@
                                     <table class="table table-bordered table-striped">
                                         <tbody>
                                             <tr>
+                                                <td class="text-bold" style="width: 30%;">Email</td>
+                                                <td style="width: 70%;">{{ $user->email }}</td>
+                                            </tr>
+                                            <tr>
                                                 <td class="text-bold" style="width: 30%;">NIK</td>
                                                 <td style="width: 70%;">{{ $user->nik }}</td>
                                             </tr>
@@ -93,29 +97,29 @@
                                                 <td style="width: 50%;">
                                                     {{ isset($user->profile) && $user->profile->birth_date
                                                         ? \Carbon\Carbon::parse($user->profile->birth_date)->isoFormat('D MMMM YYYY')
-                                                        : 'Tanggal lahir belum diisi' }}
+                                                        : '-' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Kabupaten/kota Asal</td>
                                                 <td style="width: 70%;">
-                                                    {{ $user->profile->regency->name ?? 'Kabupaten/kota asal belum diisi' }}
+                                                    {{ $user->profile->regency->name ?? '-' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">NIM</td>
-                                                <td style="width: 70%;">{{ $user->profile->nim ?? 'NIM belum diisi' }}</td>
+                                                <td style="width: 70%;">{{ $user->profile->nim ?? '-' }}</td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Universitas</td>
                                                 <td style="width: 70%;">
-                                                    {{ $user->profile->university ?? 'Universitas belum diisi' }}
+                                                    {{ $user->profile->university ?? '-' }}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="text-bold" style="width: 30%;">Jurusan</td>
                                                 <td style="width: 70%;">
-                                                    {{ $user->profile->major ?? 'Jurusan belum diisi' }}</td>
+                                                    {{ $user->profile->major ?? '-' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -134,7 +138,7 @@
                                                             target="_blank">Lihat KTP
                                                         </a>
                                                     @else
-                                                        KTP belum diunggah.
+                                                        -
                                                     @endif
                                                 </td>
                                             </tr>
@@ -146,7 +150,7 @@
                                                             target="_blank">Lihat Kartu Keluarga
                                                         </a>
                                                     @else
-                                                        Kartu keluarga belum diunggah.
+                                                        -
                                                     @endif
                                                 </td>
                                             </tr>
@@ -158,7 +162,7 @@
                                                             target="_blank">Lihat Surat Aktif Kuliah
                                                         </a>
                                                     @else
-                                                        Surat aktif kuliah belum diunggah.
+                                                        -
                                                     @endif
                                                 </td>
                                             </tr>
@@ -170,7 +174,7 @@
                                                             target="_blank">Lihat Foto
                                                         </a>
                                                     @else
-                                                        Foto belum diunggah.
+                                                        -
                                                     @endif
                                                 </td>
                                             </tr>

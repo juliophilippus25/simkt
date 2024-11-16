@@ -25,9 +25,6 @@
 
         <!-- Default box -->
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Pengajuan Penghuni</h3>
-            </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -70,7 +67,7 @@
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                             data-target="#verifyModal{{ $residency->user->id }}_{{ $residency->id }}"
                                             title="Verifikasi">
-                                            <i class="fas fa-check"></i>
+                                            <i class="fas fa-check"></i> Verifikasi
                                         </button>
 
                                         <!-- Modal Verifikasi Penghuni -->
@@ -106,8 +103,8 @@
                                         </div>
                                     @elseif ($residency->status == 'pending-payment')
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                            data-target="#detailModal{{ $residency->user->id }}" title="Detail">
-                                            <i class="fas fa-check"></i>
+                                            data-target="#detailModal{{ $residency->user->id }}" title="Verfikasi">
+                                            <i class="fas fa-check"></i> Verifikasi
                                         </button>
 
                                         <!-- Modal Detail Verifikasi Kamar -->
@@ -180,7 +177,7 @@
                                     @elseif ($residency->status == 'accepted')
                                         @if ($residency->user->userRoom)
                                             <a href="{{ route('admin.penghuni.show', $residency->user->id) }}"
-                                                class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
+                                                class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>
                                         @endif
                                     @endif
 
