@@ -52,7 +52,7 @@
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#verifyModal{{ $payment->id }}" title="Verifikasi">
-                                        <i class="fas fa-check"></i>
+                                        <i class="fas fa-check"></i> Verifikasi
                                     </button>
 
                                     <!-- Modal Verifikasi Penghuni -->
