@@ -25,9 +25,6 @@
 
         <!-- Default box -->
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Penghuni</h3>
-            </div>
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -42,9 +39,7 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>
-                                    <a href="{{ asset('storage/users/ktp/' . $user->profile->ktp) }}" target="_blank">
-                                        {{ $user->profile->name }}
-                                    </a>
+                                    {{ $user->profile->name }}
                                 </td>
                                 <td>{{ $user->profile->gender == 'M' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 <td>
@@ -54,7 +49,7 @@
                                     @if ($user->is_verified == 0)
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                             data-target="#verifyModal{{ $user->id }}" title="Verifikasi">
-                                            <i class="fas fa-check"></i>
+                                            <i class="fas fa-check"></i> Verifikasi
                                         </button>
 
                                         {{-- Modal Verifikasi --}}
@@ -70,8 +65,13 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>
-                                                            Apakah Anda yakin ingin verifikasi
-                                                            <b>{{ $user->profile->name }}</b>?
+                                                        <div class="form-group">
+                                                            <label>KTP:</label>
+                                                            <a href="{{ asset('storage/users/ktp/' . $user->profile->ktp) }}"
+                                                                target="_blank">Lihat KTP</a>
+                                                        </div>
+                                                        Apakah Anda yakin ingin verifikasi
+                                                        <b>{{ $user->profile->name }}</b>?
                                                         </p>
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
@@ -90,7 +90,7 @@
                                         </div>
                                     @elseif ($user->is_verified == 1)
                                         <a href="{{ route('admin.users.show', $user->id) }}"
-                                            class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
+                                            class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>
                                     @endif
                                 </td>
                             </tr>
