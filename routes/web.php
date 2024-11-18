@@ -22,6 +22,11 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
+        Route::prefix('/manajemen-admin')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.admin.index');
+            Route::post('/tambah', [App\Http\Controllers\Admin\AdminController::class, 'store'])->name('admin.admin.store');
+        });
+
         Route::prefix('/penghuni')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
             Route::post('/verify/{id}', [App\Http\Controllers\Admin\UserController::class, 'verify'])->name('admin.users.verify');

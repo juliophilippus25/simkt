@@ -54,8 +54,10 @@
                         </a>
                     </li>
 
-                    <li class="nav-item {{ request()->is('admin/penghuni*') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('admin/penghuni*') ? 'active' : '' }}">
+                    <li
+                        class="nav-item {{ request()->is('admin/penghuni*') ? 'menu-open' : '' }} || {{ request()->is('admin/manajemen-admin*') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->is('admin/penghuni*') ? 'active' : '' }} || {{ request()->is('admin/manajemen-admin*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Pengguna
@@ -64,7 +66,8 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="../../index.html" class="nav-link">
+                                <a href="{{ route('admin.admin.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.admin.index') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Admin</p>
                                 </a>

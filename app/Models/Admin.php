@@ -23,6 +23,7 @@ class Admin extends Authenticatable
         'nip',
         'password',
         'role',
+        'is_active'
     ];
 
     /**
