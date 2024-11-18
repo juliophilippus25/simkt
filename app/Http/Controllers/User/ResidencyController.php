@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApplyResidency;
+use App\Models\OutResidency;
 use App\Models\Payment;
 use App\Models\User;
+use App\Models\UserRoom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -136,6 +138,37 @@ class ResidencyController extends Controller
         $payment->save();
 
         toast('Upload bukti bayar berhasil.','success')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
+    }
+
+    public function getOutResidency() {
+        $userId = auth('user')->user()->id;
+        $userRoom = UserRoom::with('room')->where('user_id', $userId)->first();
+        $outResidency = OutResidency::where('user_id', $userId)->first();
+        return view('user.penghuni.out', compact('userRoom', 'outResidency'));
+    }
+
+    public function storeOutResidency(Request $request) {
+        $userId = auth('user')->user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'reason' => 'required',
+        ], [
+            'reason.required' => 'Alasan harus diisi.',
+        ]);
+
+        if ($validator->fails()) {
+            toast('Pengajuan keluar penghuni gagal.','error')->timerProgressBar()->autoClose(5000);
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $outResidency = new OutResidency();
+        $outResidency->id = strtoupper(hash('sha256', "!@#!@#" . Carbon::now()->format('YmdH:i:s')));
+        $outResidency->user_id = $userId;
+        $outResidency->reason = $request->reason;
+        $outResidency->save();
+
+        toast('Pengajuan keluar penghuni berhasil.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->back();
     }
 }

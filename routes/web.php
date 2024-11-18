@@ -41,6 +41,8 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::post('/reject/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'rejectApplyResidency'])->name('admin.penghuni.reject');
             Route::post('/verify-or-reject/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'verifyOrReject'])->name('admin.penghuni.verify-or-reject');
             Route::get('/detail/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'show'])->name('admin.penghuni.show');
+            Route::get('/keluar', [App\Http\Controllers\Admin\ResidencyController::class, 'getOutResidency'])->name('admin.penghuni.out');
+            Route::post('/konfirmasi/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'confirmationOutResidency'])->name('admin.penghuni.out.confirmation');
         });
 
         Route::prefix('/perpanjangan')->group(function () {
@@ -61,5 +63,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::post('/pengajuan-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'storeApplyResidency'])->name('user.penghuni.apply');
         Route::put('/update-pengajuan-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'restoreApplyResidency'])->name('user.penghuni.update');
         Route::post('/upload-bukti-pembayaran', [App\Http\Controllers\User\ResidencyController::class, 'storePayment'])->name('user.penghuni.payment');
+        Route::get('/keluar-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'getOutResidency'])->name('user.penghuni.out');
+        Route::post('/pengajuan-keluar-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'storeOutResidency'])->name('user.penghuni.out.apply');
     });
 });

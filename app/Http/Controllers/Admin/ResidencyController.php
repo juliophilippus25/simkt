@@ -8,6 +8,7 @@ use App\Mail\RejectPayment;
 use App\Mail\RejectResidency;
 use App\Mail\VerifyWithRoom;
 use App\Models\ApplyResidency;
+use App\Models\OutResidency;
 use App\Models\Payment;
 use App\Models\Room;
 use App\Models\User;
@@ -194,5 +195,35 @@ class ResidencyController extends Controller
                         ->get();
 
         return view('admin.residencies.show', compact('dataType', 'user', 'payments'));
+    }
+
+    public function getOutResidency() {
+        $dataType = 'pengajuan keluar asrama';
+        $outResidencies = OutResidency::with('user')->get();
+        return view('admin.residencies.out', compact('dataType', 'outResidencies'));
+    }
+
+    public function confirmationOutResidency($id) {
+        $adminId = auth('admin')->user()->id;
+
+        $outResidency = OutResidency::findOrFail($id);
+        $outResidency->verified_by = $adminId;
+        $outResidency->verified_at = now();
+        $outResidency->status = 'accepted';
+        $outResidency->updated_at = now();
+        $outResidency->save();
+
+        $userRoom = UserRoom::where('user_id', $outResidency->user_id)->first();
+        $userRoom->delete();
+
+        $appliedResidency = ApplyResidency::where('user_id', $outResidency->user_id)->first();
+        $appliedResidency->delete();
+
+        $room = Room::where('id', $userRoom->room_id)->first();
+        $room->status = 'available';
+        $room->save();
+
+        toast('Pengajuan keluar penghuni berhasil dikonfirmasi.','success')->timerProgressBar()->autoClose(5000);
+        return redirect()->back();
     }
 }
