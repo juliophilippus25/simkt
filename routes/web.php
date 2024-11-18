@@ -21,6 +21,8 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
     // Route Admin
     Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/profil', [App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('admin.profile');
+        Route::post('/update-biodata', [App\Http\Controllers\Admin\ProfileController::class, 'updateBiodata'])->name('admin.biodata.update');
 
         Route::prefix('/manajemen-admin')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.admin.index');

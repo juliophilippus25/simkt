@@ -64,7 +64,6 @@ class ProfileController extends Controller
         $userId = auth('user')->user()->id;
         $user = User::findOrFail($userId);
 
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'ktp' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
             'family_card' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',

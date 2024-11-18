@@ -21,13 +21,19 @@
                             style="width: 35px; height: 35px; object-fit: cover;">
                     @endif
                     @elseauth('admin')
-                    <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image"
-                        style="width: 35px; height: 35px; object-fit: cover;">
+                    @if (Auth::guard('admin')->user()->avatar)
+                        <img src="{{ asset('storage/admins/avatar/' . Auth::guard('admin')->user()->avatar) }}"
+                            class="img-circle elevation-2" alt="User Image"
+                            style="width: 35px; height: 35px; object-fit: cover;">
+                    @else
+                        <img src="{{ asset('images/default.png') }}" class="img-circle elevation-2" alt="User Image"
+                            style="width: 35px; height: 35px; object-fit: cover;">
+                    @endif
                 @endauth
             </div>
             <div class="info">
                 @auth('admin')
-                    <a href="#" class="d-block">
+                    <a href="{{ route('admin.profile') }}" class="d-block">
                         {{ Auth::guard('admin')->user()->name }}
                     </a>
                     @elseauth('user')
@@ -65,13 +71,15 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('admin.admin.index') }}"
-                                    class="nav-link {{ request()->routeIs('admin.admin.index') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Admin</p>
-                                </a>
-                            </li>
+                            @if (Auth::guard('admin')->user()->role == 'superadmin')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.admin.index') }}"
+                                        class="nav-link {{ request()->routeIs('admin.admin.index') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Admin</p>
+                                    </a>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a href="{{ route('admin.users.index') }}"
                                     class="nav-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }} || {{ request()->routeIs('admin.users.show') ? 'active' : '' }}">
