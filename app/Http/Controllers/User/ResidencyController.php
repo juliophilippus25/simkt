@@ -42,7 +42,20 @@ class ResidencyController extends Controller
         $residencyDeadline = $appliedResidency ? Carbon::parse($appliedResidency->updated_at)->addDays(3) : null;
 
         $userRoom = $user->userRoom;
+        $rentPeriod = $userRoom ? Carbon::parse($userRoom->rent_period) : null;
         $subDays = $userRoom ? Carbon::parse($userRoom->rent_period)->subDays(10) : null;
+
+        $roomPrice = $userRoom ? $userRoom->room->price : 0;
+
+        $penalty = 0;
+        $daysLate = 0;
+        if ($rentPeriod && Carbon::now()->gt($rentPeriod)) {
+            $daysLate = Carbon::now()->diffInDays($rentPeriod);
+            $daysLate = abs(round($daysLate));
+            $penalty = $daysLate > 0 ? $daysLate * 5000 : 0;
+        }
+
+        $totalAmount = $roomPrice + ($penalty ?? 0);
 
         $dataType = 'pengajuan';
 
@@ -54,7 +67,10 @@ class ResidencyController extends Controller
             'pendingPayment',
             'rejectedPayment',
             'residencyDeadline',
-            'subDays'
+            'subDays',
+            'penalty',
+            'roomPrice',
+            'totalAmount',
         ));
     }
 

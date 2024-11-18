@@ -229,7 +229,15 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Total Bayar</strong></td>
-                                        <td>Rp. 250.000</td>
+                                        <td>
+                                            @if ($penalty > 0)
+                                                Rp. {{ number_format($totalAmount, 0, ',', '.') }} (Rp.
+                                                {{ number_format($roomPrice, 0, ',', '.') }} + Denda Rp.
+                                                {{ number_format($penalty, 0, ',', '.') }})
+                                            @else
+                                                Rp. {{ number_format($roomPrice, 0, ',', '.') }}
+                                            @endif
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
