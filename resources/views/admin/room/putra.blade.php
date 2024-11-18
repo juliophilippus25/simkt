@@ -48,7 +48,7 @@
                                 <td>
                                     @if ($room->userRooms->isNotEmpty())
                                         <a href="{{ route('admin.room.putra.show', $room->userRooms->first()->user_id) }}"
-                                            class="btn btn-primary">
+                                            class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye"></i> Detail
                                         </a>
                                     @endif

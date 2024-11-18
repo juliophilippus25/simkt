@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('app:reject-applicaction-without-payment')->everyMinute();
+Schedule::command('app:notif-sub-day')->everyMinute();
