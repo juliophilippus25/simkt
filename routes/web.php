@@ -52,6 +52,12 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
             Route::post('/konfirmasi/{id}', [App\Http\Controllers\Admin\ResidencyController::class, 'confirmationOutResidency'])->name('admin.penghuni.out.confirmation');
         });
 
+        Route::prefix('/pengajuan-ubah-biodata')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\BiodataController::class, 'index'])->name('admin.biodata.index');
+            Route::post('/accept/{id}', [App\Http\Controllers\Admin\BiodataController::class, 'acceptBiodata'])->name('admin.biodata.accept');
+            Route::post('/reject/{id}', [App\Http\Controllers\Admin\BiodataController::class, 'rejectBiodata'])->name('admin.biodata.reject');
+        });
+
         Route::prefix('/perpanjangan')->group(function () {
            Route::get('/', [App\Http\Controllers\Admin\ExtensionController::class, 'index'])->name('admin.extension.index');
            Route::post('/accept/{id}', [App\Http\Controllers\Admin\ExtensionController::class, 'acceptPayment'])->name('admin.extension.accept');
@@ -72,5 +78,7 @@ Route::middleware(['redirectIfNotAuthenticated', 'accessControl'])->group(functi
         Route::post('/upload-bukti-pembayaran', [App\Http\Controllers\User\ResidencyController::class, 'storePayment'])->name('user.penghuni.payment');
         Route::get('/keluar-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'getOutResidency'])->name('user.penghuni.out');
         Route::post('/pengajuan-keluar-penghuni', [App\Http\Controllers\User\ResidencyController::class, 'storeOutResidency'])->name('user.penghuni.out.apply');
+        Route::get('/biodata', [App\Http\Controllers\User\BiodataController::class, 'index'])->name('user.biodata.index');
+        Route::post('/update-pengajuan-biodata', [App\Http\Controllers\User\BiodataController::class, 'store'])->name('user.biodata.store');
     });
 });

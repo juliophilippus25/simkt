@@ -61,7 +61,11 @@ class User extends Authenticatable
         return $this->hasOne(UserRoom::class);
     }
 
-    public function payment( ){
+    public function payment(){
         return $this->hasMany(Payment::class);
+    }
+
+    public function biodatas(){
+        return $this->hasMany(Biodata::class);
     }
 }

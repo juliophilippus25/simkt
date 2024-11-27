@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                        {{-- <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Dashboard</a></li> --}}
                         <li class="breadcrumb-item active">Keluar Asrama</li>
                     </ol>
                 </div>
@@ -50,10 +50,13 @@
 
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label class="text-dark">Alasan :</label>
+                                        <label class="text-dark">Alasan <b class="text-danger">*</b></label>
                                         <textarea id="reason" name="reason" class="form-control" rows="3" cols="3" placeholder="Alasan"
                                             required>
-                                    </textarea>
+                                        </textarea>
+                                        @error('reason')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -73,5 +76,11 @@
 
     </section>
     <!-- /.content -->
+
+@section('script')
+    <script>
+        document.getElementById('reason').value = '';
+    </script>
+@endsection
 
 @endsection

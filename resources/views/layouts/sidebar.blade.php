@@ -148,6 +148,13 @@
                                     <p>Keluar Asrama</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.biodata.index') }}"
+                                    class="nav-link {{ request()->routeIs('admin.biodata.index') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ubah Biodata</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
@@ -163,7 +170,7 @@
                 @endauth
 
                 @auth('user')
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('user.dashboard') }}"
                             class="nav-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -171,12 +178,12 @@
                                 Dashboard
                             </p>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li
-                        class="nav-item {{ request()->is('user/penghuni*') ? 'menu-open' : '' }} || {{ request()->is('user/keluar-penghuni*') ? 'menu-open' : '' }}">
+                        class="nav-item {{ request()->is('user/penghuni*') ? 'menu-open' : '' }} || {{ request()->is('user/keluar-penghuni*') ? 'menu-open' : '' }} || {{ request()->is('user/biodata*') ? 'menu-open' : '' }}">
                         <a href="#"
-                            class="nav-link {{ request()->is('user/penghuni*') ? 'active' : '' }} || {{ request()->is('user/keluar-penghuni*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->is('user/penghuni*') ? 'active' : '' }} || {{ request()->is('user/keluar-penghuni*') ? 'active' : '' }} || {{ request()->is('user/biodata*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-address-book"></i>
                             <p>
                                 Pengajuan
@@ -196,6 +203,13 @@
                                     class="nav-link {{ request()->routeIs('user.penghuni.out') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Keluar Asrama</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('user.biodata.index') }}"
+                                    class="nav-link {{ request()->routeIs('user.biodata.index') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ubah Biodata</p>
                                 </a>
                             </li>
                         </ul>

@@ -138,7 +138,7 @@ class AuthController extends Controller
             $credentials = ['nik' => $identifier, 'password' => $password];
             if (Auth::guard('user')->attempt($credentials)) {
                 toast('Anda berhasil masuk ke sistem.','success')->timerProgressBar()->autoClose(5000);
-                return redirect()->intended(route('user.dashboard'));
+                return redirect()->intended(route('user.penghuni'));
             }
         } elseif (strlen($identifier) === 18 && preg_match('/^[0-9]+$/', $identifier)) {
             // Cek keberadaan NIP di database
