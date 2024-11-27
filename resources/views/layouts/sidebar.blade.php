@@ -123,9 +123,10 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item {{ request()->is('admin/pengajuan-penghuni*') ? 'menu-open' : '' }}">
+                    <li
+                        class="nav-item {{ request()->is('admin/pengajuan-penghuni*') ? 'menu-open' : '' }} || {{ request()->is('admin/pengajuan-ubah-biodata*') ? 'menu-open' : '' }}">
                         <a href="#"
-                            class="nav-link {{ request()->is('admin/pengajuan-penghuni*') ? 'active' : '' }}">
+                            class="nav-link {{ request()->is('admin/pengajuan-penghuni*') ? 'active' : '' }} || {{ request()->is('admin/pengajuan-ubah-biodata*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-address-book"></i>
                             <p>
                                 Pengajuan
