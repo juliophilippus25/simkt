@@ -12,6 +12,8 @@ Route::middleware('redirectIfAuthenticated')->group(function () {
     Route::post('register', [App\Http\Controllers\AuthController::class, 'register'])->name('register');
     Route::get('login', [App\Http\Controllers\AuthController::class, 'showLogin'])->name('showLogin');
     Route::post('login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
+    Route::get('reset-password', [App\Http\Controllers\AuthController::class, 'showResetPassword'])->name('showResetPassword');
+    Route::post('reset-password', [App\Http\Controllers\AuthController::class, 'resetPassword'])->name('resetPassword');
 });
 
 // Route terproteksi

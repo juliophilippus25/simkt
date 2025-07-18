@@ -59,6 +59,10 @@
                         @enderror
                     </div>
 
+                    <div class="form-group">
+                        <a href="{{ route('showResetPassword') }}">Lupa Password?</a>
+                    </div>
+
                     <!-- Tombol Login -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-block">Login</button>

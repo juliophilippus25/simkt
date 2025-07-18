@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPassword;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -166,6 +168,38 @@ class AuthController extends Controller
         } elseif (Auth::guard('user')->check()) {
             Auth::guard('user')->logout();
         }
+        return redirect()->route('showLogin');
+    }
+
+    public function showResetPassword() {
+        return view('auth.reset-password');
+    }
+
+    public function resetPassword(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ], [
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Format email salah.',
+        ]);
+
+        if ($validator->fails()) {
+            toast('Periksa kembali data anda.','error')->timerProgressBar()->autoClose(5000);
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $user = User::where('email', $request->email)->with('profile')->first();
+        if (!$user) {
+            toast('Email tidak terdaftar.','error')->timerProgressBar()->autoClose(5000);
+            return redirect()->back()->withInput();
+        }
+
+        $user->password = $this->generatePassword($user->nik, $user->profile->phone);
+        $user->save();
+
+        Mail::to($user->email)->send(new ResetPassword($user->profile->name, $user->nik, $user->profile->phone));
+
+        toast('Password berhasil direset.','success')->timerProgressBar()->autoClose(5000);
         return redirect()->route('showLogin');
     }
 }
