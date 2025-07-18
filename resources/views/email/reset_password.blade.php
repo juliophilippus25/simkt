@@ -88,7 +88,6 @@
                 yang Anda daftarkan. Gunakan password kombinasi dari 4 digit terakhir <b>NIK</b> dan <b>Nomor HP</b>
                 Anda.
             </p>
-            <p>Contoh:</p>
             <table class="info-table">
                 <tr>
                     <td>NIK Anda</td>
